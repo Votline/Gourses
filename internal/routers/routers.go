@@ -1,8 +1,6 @@
 package routers
 
 import (
-	"fmt"
-
 	"gourses/internal/services"
 	"gourses/internal/users"
 
@@ -24,7 +22,5 @@ func initServices(r *gin.Engine) {
 		group := r.Group(path)
 
 		svc.RegisterRoutes(group)
-
-		fmt.Println("\n\n\nRegistered service: " + path)
 	}
 }
