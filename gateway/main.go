@@ -2,9 +2,10 @@ package main
 
 import (
 	"gourses/internal/routers"
+	"os"
 )
 
 func main() {
 	srv := routers.Init()
-	srv.Run(":8080")
+	srv.Run(":"+os.Getenv("API_PORT"))
 }

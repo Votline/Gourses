@@ -1,6 +1,7 @@
 package db
 
 import (
+	"os"
 	"time"
 
 	sq "github.com/Masterminds/squirrel"
@@ -18,11 +19,12 @@ type DB struct {
 func NewDB(log *zap.Logger) (*DB, error) {
 	var db *sqlx.DB
 	var err error
-	const connStr = "postgres://postgres:postgres@postgres:5432/users_db?sslmode=disable"
+	connStr := os.Getenv("POSTGRES_URL")
 	for i := 0; i < 10; i++ {
 		db, err = sqlx.Connect("postgres", connStr)
 		if err != nil {
 			log.Error("Failed to connect to database", zap.Error(err))
+			time.Sleep(time.Second)
 			continue
 		}
 
