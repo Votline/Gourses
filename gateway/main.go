@@ -1,11 +1,15 @@
 package main
 
 import (
-	"gateway/internal/routers"
 	"os"
+
+	"gateway/internal/routers"
+
+	"go.uber.org/zap"
 )
 
 func main() {
-	srv := routers.Init()
-	srv.Run(":"+os.Getenv("API_PORT"))
+	log, _ := zap.NewDevelopment()
+	srv := routers.Init(log)
+	srv.Run(":" + os.Getenv("API_PORT"))
 }
