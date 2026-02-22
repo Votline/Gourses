@@ -1,4 +1,4 @@
-module gourses
+module gateway
 
 go 1.25.6
 

@@ -1,0 +1,16 @@
+[grpc_config]
+Target:localhost:50051
+Endpoint:users.UsersService/RegUser
+Data:`
+	{
+		"password": "123456",
+		"email": "test@test.com",
+		"name": "test",
+		"role": "user"
+	}
+`
+ProtoPath:../protos/users.proto
+Type:grpc
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZiYzVhMjUzLWVjZWQtNGQyNC05ZWM5LTk5ODA1YWQxMzYyMSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcxNzY0OTQ1fQ.GaDLy0V5OR9ktgVpwJckoeqOMY84WqohgDKZsoIDjN0"}
+[\grpc_config]
+

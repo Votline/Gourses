@@ -1,4 +1,4 @@
-FROM golang:alpine AS builder
+FROM golang:1.25.6-alpine AS builder
 WORKDIR /build/gateway
 
 COPY gateway/go.mod gateway/go.sum ./

@@ -1,7 +1,7 @@
 package users
 
 import (
-	"gourses/internal/services"
+	"gateway/internal/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

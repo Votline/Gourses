@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -11,9 +12,8 @@ import (
 )
 
 type DB struct {
-	log *zap.Logger
-	db  *sqlx.DB
-	bd  sq.StatementBuilderType
+	db *sqlx.DB
+	bd sq.StatementBuilderType
 }
 
 func NewDB(log *zap.Logger) (*DB, error) {
@@ -38,12 +38,29 @@ func NewDB(log *zap.Logger) (*DB, error) {
 	}
 
 	return &DB{
-		log: log,
-		db:  db,
-		bd:  sq.StatementBuilder.PlaceholderFormat(sq.Dollar),
+		db: db,
+		bd: sq.StatementBuilder.PlaceholderFormat(sq.Dollar),
 	}, err
 }
 
 func (d *DB) Close() error {
 	return d.db.Close()
+}
+
+func (d *DB) RegUser(id, username, role, pswd string) error {
+	const op = "db.RegUser"
+
+	query, args, err := d.bd.Insert("users").
+		Columns("id, user_name", "role", "password").
+		Values(id, username, role, pswd).
+		ToSql()
+	if err != nil {
+		return fmt.Errorf("%s: create query: %w", op, err)
+	}
+
+	if _, err := d.db.Exec(query, args...); err != nil {
+		return fmt.Errorf("%s: insert user: %w", op, err)
+	}
+
+	return nil
 }

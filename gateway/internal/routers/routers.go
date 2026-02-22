@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"gourses/internal/services"
-	"gourses/internal/users"
+	"gateway/internal/services"
+	"gateway/internal/users"
 
 	"github.com/gin-gonic/gin"
 )

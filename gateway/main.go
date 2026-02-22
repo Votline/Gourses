@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gourses/internal/routers"
+	"gateway/internal/routers"
 	"os"
 )
 
