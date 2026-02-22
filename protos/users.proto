@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package users;
+option go_package = "./;usersservice";
+
+message RegReq {
+  string name = 1;
+  string email = 2;
+  string role = 3;
+  string password = 4;
+}
+message RegRes {
+  string token = 1;
+  string session_key = 2;
+  string user_id = 3;
+}
+
+message LogReq {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+}
+message LogRes {
+  string token = 1;
+  string session_key = 2;
+  string user_id = 3;
+}
+
+message DelReq {
+  string token = 1;
+  string session_key = 2;
+  string del_user_id = 3;
+}
+message DelRes {}
+
+service UsersService {
+  rpc RegUser (RegReq) returns (RegRes);
+  rpc LogUser (LogReq) returns (LogRes);
+  rpc DelUser (DelReq) returns (DelRes);
+}

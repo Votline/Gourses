@@ -3,12 +3,14 @@ package main
 import (
 	"users/internal/db"
 
+	pb "github.com/Votline/Gourses/protos/generated-users"
 	"go.uber.org/zap"
 )
 
-type user struct {
+type usersserver struct {
 	log *zap.Logger
 	db  *db.DB
+	pb.UnimplementedUsersServiceServer
 }
 
 func main() {
@@ -21,5 +23,5 @@ func main() {
 	}
 	defer db.Close()
 
-	//u := user{log: log, db: db}
+	// u := user{log: log, db: db}
 }
