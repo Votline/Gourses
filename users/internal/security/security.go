@@ -12,6 +12,7 @@ import (
 type UserInfo struct {
 	ID   string `json:"id"`
 	Role string `json:"role"`
+	Pswd string `json:"-"`
 	jwt.RegisteredClaims
 }
 

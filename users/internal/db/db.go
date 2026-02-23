@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	"users/internal/security"
+
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -47,7 +49,7 @@ func (d *DB) Close() error {
 }
 
 func (d *DB) RegUser(id, username, role, pswd string) error {
-	const op = "db.RegUser"
+	const op = "UsersPostgresDB.RegUser"
 
 	query, args, err := d.bd.Insert("users").
 		Columns("id, user_name", "role", "password").
@@ -62,4 +64,26 @@ func (d *DB) RegUser(id, username, role, pswd string) error {
 	}
 
 	return nil
+}
+
+func (d *DB) LogUser(username string) (security.UserInfo, error) {
+	const op = "UsersPostgresDB.LogUser"
+	ui := security.UserInfo{}
+
+	query, args, err := d.bd.Select("id", "password").
+		From("users").
+		Where(sq.Eq{"user_name": username}).
+		ToSql()
+	if err != nil {
+		return ui, fmt.Errorf("%s: create query: %w", op, err)
+	}
+
+	if err := d.db.QueryRow(query, args...).Scan(
+		&ui.ID,
+		&ui.Pswd,
+	); err != nil {
+		return ui, fmt.Errorf("%s: select user: %w", op, err)
+	}
+
+	return ui, nil
 }

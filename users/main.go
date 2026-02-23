@@ -80,8 +80,53 @@ func (u *usersserver) RegUser(ctx context.Context, req *pb.RegReq) (*pb.RegRes, 
 
 	if err := u.db.RegUser(id, name+email, role, hashPswd); err != nil {
 		u.log.Error(op, zap.Error(err))
+		if err := u.rdb.Delete(sk); err != nil {
+			u.log.Error("delete session",
+				zap.String("op", op),
+				zap.Error(err))
+		}
 		return nil, fmt.Errorf("%s: add to db: %w", op, err)
 	}
 
-	return &pb.RegRes{Token: token, SessionKey: sk}, nil
+	return &pb.RegRes{Token: token, SessionKey: sk, UserId: id}, nil
+}
+
+func (u *usersserver) LogUser(ctx context.Context, req *pb.LogReq) (res *pb.LogRes, err error) {
+	const op = "usersserver.LogUser"
+
+	name := req.GetName()
+	email := req.GetEmail()
+	pswd := req.GetPassword()
+
+	token, err := security.GenerateToken(name+email, pswd)
+	if err != nil {
+		return nil, fmt.Errorf("%s: generate token: %w", op, err)
+	}
+
+	sk, err := u.rdb.NewSession(name+email, pswd)
+	if err != nil {
+		return nil, fmt.Errorf("%s: create session: %w", op, err)
+	}
+
+	defer func() {
+		if err != nil {
+			if err := u.rdb.Delete(sk); err != nil {
+				u.log.Error("delete session",
+					zap.String("op", op),
+					zap.Error(err))
+			}
+		}
+	}()
+
+	ui, err := u.db.LogUser(name + email)
+	if err != nil {
+		u.log.Error(op, zap.Error(err))
+		return nil, fmt.Errorf("%s: log user: %w", op, err)
+	}
+
+	if err = security.Check(pswd, ui.Pswd); err != nil {
+		return nil, fmt.Errorf("%s: check password: %w", op, err)
+	}
+
+	return &pb.LogRes{Token: token, SessionKey: sk, UserId: ui.ID}, nil
 }

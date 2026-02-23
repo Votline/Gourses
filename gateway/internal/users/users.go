@@ -45,4 +45,7 @@ func (us *UserService) RegisterRoutes(r *gin.RouterGroup) {
 	r.POST("/reg", func(c *gin.Context) {
 		us.Register(c)
 	})
+	r.POST("/log", func(c *gin.Context) {
+		us.Login(c)
+	})
 }

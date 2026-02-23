@@ -6,6 +6,17 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdiNjBlZmExLTI3MTctNDk2OS04YmY2LTk1NGJlODNiODRmZiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MTgzMjI5MH0.0kJHep0i5j85_YVWBICEOY_WYbeK9d6cFK3Kmuhq6dk"}
+Response:{"error":"rpc error: code = Unknown desc = usersserver.RegUser: add to db: UsersPostgresDB.RegUser: insert user: pq: duplicate key value violates unique constraint \"users_user_name_key\" (23505)"}
 [\reg]
+
+[log]
+URL:http://localhost:8080/api/users/log
+Method:POST
+Body:`
+	{"name": "Viza", "email": "some@mail.com", "password":"eightpswd"}
+`
+Headers:Content-Type: application/json
+Type:http
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlZpemFzb21lQG1haWwuY29tIiwicm9sZSI6ImVpZ2h0cHN3ZCIsImV4cCI6MTc3MTg0ODczM30.7ymXnxPd-rJaUWMb49IdeuQ91AYWp36vJFqj3ROEEoA"}
+[\log]
 

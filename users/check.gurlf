@@ -1,16 +1,47 @@
-[grpc_config]
+[reg]
 Target:localhost:50051
 Endpoint:users.UsersService/RegUser
 Data:`
 	{
 		"password": "123456",
 		"email": "test@test.com",
-		"name": "test",
+		"name": "testa",
 		"role": "user"
 	}
 `
 ProtoPath:../protos/users.proto
 Type:grpc
-Response:rpc error: code = Unavailable desc = error reading from server: EOF
-[\grpc_config]
+Response:rpc error: code = Unknown desc = usersserver.RegUser: add to db: UsersPostgresDB.RegUser: insert user: pq: duplicate key value violates unique constraint "users_user_name_key" (23505)
+[\reg]
+
+[log]
+Target:localhost:50051
+Endpoint:users.UsersService/LogUser
+Data:`
+	{
+		"name":"testa",
+		"email":"test@test.com",
+		"password":"123456"
+	}
+`
+ProtoPath:../protos/users.proto
+Type:grpc
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3RhdGVzdEB0ZXN0LmNvbSIsInJvbGUiOiIxMjM0NTYiLCJleHAiOjE3NzE4NDgyMjh9.SJO1T1nt417Z20ljXMa62RclN2l7To2APqDeT7LeaNM","sessionKey":"248bc46f-fa17-47d3-bcf1-92b9bea7db8d","userId":"7b0a8646-e776-4960-aa7a-dd0506b2d38f"}
+[\log]
+
+[log_rep]
+Target_ID:1
+Replace:`
+[rep]
+Data:`
+	{
+		"name":"testa",
+		"email":"test@test.com",
+		"password":"123"
+	}`
+[\rep]
+`
+Type:repeat
+Response:rpc error: code = Unknown desc = usersserver.LogUser: check password: crypto/bcrypt: hashedPassword is not the hash of the given password
+[\log_rep]
 
