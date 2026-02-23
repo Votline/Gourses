@@ -33,7 +33,6 @@ func NewDB(log *zap.Logger) (*DB, error) {
 		db.SetConnMaxLifetime(5 * time.Minute)
 		db.SetConnMaxIdleTime(5 * time.Minute)
 
-		log.Info("Connected to database")
 		break
 	}
 

@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"users/internal/db"
+	"users/internal/rdb"
 	"users/internal/security"
 
 	pb "github.com/Votline/Gourses/protos/generated-users"
@@ -18,6 +19,7 @@ import (
 type usersserver struct {
 	log *zap.Logger
 	db  *db.DB
+	rdb *rdb.RDB
 	pb.UnimplementedUsersServiceServer
 }
 
@@ -35,8 +37,16 @@ func main() {
 		log.Fatal("Failed to create database", zap.Error(err))
 	}
 	defer db.Close()
+	log.Info("Connected to database")
 
-	u := usersserver{log: log, db: db}
+	rdb, err := rdb.NewRDB(log)
+	if err != nil {
+		log.Fatal("Failed to create redis", zap.Error(err))
+	}
+	defer rdb.Close()
+	log.Info("Connected to redis")
+
+	u := usersserver{log: log, db: db, rdb: rdb}
 	srv := grpc.NewServer()
 	pb.RegisterUsersServiceServer(srv, &u)
 	if err := srv.Serve(lis); err != nil {
@@ -63,10 +73,15 @@ func (u *usersserver) RegUser(ctx context.Context, req *pb.RegReq) (*pb.RegRes, 
 		return nil, fmt.Errorf("%s: generate token: %w", op, err)
 	}
 
+	sk, err := u.rdb.NewSession(id, role)
+	if err != nil {
+		return nil, fmt.Errorf("%s: create session: %w", op, err)
+	}
+
 	if err := u.db.RegUser(id, name+email, role, hashPswd); err != nil {
 		u.log.Error(op, zap.Error(err))
 		return nil, fmt.Errorf("%s: add to db: %w", op, err)
 	}
 
-	return &pb.RegRes{Token: token, SessionKey: ""}, nil
+	return &pb.RegRes{Token: token, SessionKey: sk}, nil
 }

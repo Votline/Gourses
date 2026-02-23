@@ -2,10 +2,10 @@
 URL:http://localhost:8080/api/users/reg
 Method:POST
 Body:`
-	{"name": "Viz", "email": "some@mail.com", "role":"admin", "password":"eightpswd"}
+	{"name": "Viza", "email": "some@mail.com", "role":"admin", "password":"eightpswd"}
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc0N2ZjZjE3LTNhZGUtNGJlMi04MmY2LTM1YThjNDE4YmZiNCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MTc2NzgyOX0.KRqFG-0Id2Cptpq4qtZhqLBp2PPvnmz3gWVdnah3vWk"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdiNjBlZmExLTI3MTctNDk2OS04YmY2LTk1NGJlODNiODRmZiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MTgzMjI5MH0.0kJHep0i5j85_YVWBICEOY_WYbeK9d6cFK3Kmuhq6dk"}
 [\reg]
 

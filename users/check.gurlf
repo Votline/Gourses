@@ -11,6 +11,6 @@ Data:`
 `
 ProtoPath:../protos/users.proto
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZiYzVhMjUzLWVjZWQtNGQyNC05ZWM5LTk5ODA1YWQxMzYyMSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcxNzY0OTQ1fQ.GaDLy0V5OR9ktgVpwJckoeqOMY84WqohgDKZsoIDjN0"}
+Response:rpc error: code = Unavailable desc = error reading from server: EOF
 [\grpc_config]
 
