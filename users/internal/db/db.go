@@ -70,7 +70,7 @@ func (d *DB) LogUser(username string) (security.UserInfo, error) {
 	const op = "UsersPostgresDB.LogUser"
 	ui := security.UserInfo{}
 
-	query, args, err := d.bd.Select("id", "password").
+	query, args, err := d.bd.Select("id", "password", "role").
 		From("users").
 		Where(sq.Eq{"user_name": username}).
 		ToSql()
@@ -81,9 +81,70 @@ func (d *DB) LogUser(username string) (security.UserInfo, error) {
 	if err := d.db.QueryRow(query, args...).Scan(
 		&ui.ID,
 		&ui.Pswd,
+		&ui.Role,
 	); err != nil {
 		return ui, fmt.Errorf("%s: select user: %w", op, err)
 	}
 
 	return ui, nil
+}
+
+func (d *DB) DelUser(role, id, delUserID string) error {
+	const op = "UsersPostgresDB.DelUser"
+
+	tx, err := d.db.Beginx()
+	if err != nil {
+		return fmt.Errorf("%s: begin transaction: %w", op, err)
+	}
+	defer tx.Rollback()
+
+	q := d.bd.Delete("users").Where(sq.Eq{"id": delUserID})
+	if delUserID != id {
+		if role != "admin" {
+			return fmt.Errorf("%s: delete user: not admin", op)
+		}
+
+		delRole, err := d.getData(tx, "role", "id", delUserID)
+		if err != nil {
+			return fmt.Errorf("%s: get data: %w", op, err)
+		}
+
+		if delRole == "admin" {
+			return fmt.Errorf("%s: delete user: can't delete admin", op)
+		}
+	}
+
+	query, args, err := q.ToSql()
+	if err != nil {
+		return fmt.Errorf("%s: create query: %w", op, err)
+	}
+
+	if _, err := tx.Exec(query, args...); err != nil {
+		return fmt.Errorf("%s: delete user: %w", op, err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("%s: commit transaction: %w", op, err)
+	}
+
+	return nil
+}
+
+func (d *DB) getData(tx *sqlx.Tx, col, key, val string) (string, error) {
+	const op = "UsersPostgresDB.getData"
+
+	query, args, err := d.bd.Select(col).
+		From("users").
+		Where(sq.Eq{key: val}).
+		ToSql()
+	if err != nil {
+		return "", fmt.Errorf("%s: create query: %w", op, err)
+	}
+
+	var res string
+	if err := tx.Get(&res, query, args...); err != nil {
+		return "", fmt.Errorf("%s: get data: %w", op, err)
+	}
+
+	return res, nil
 }

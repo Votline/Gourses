@@ -48,4 +48,7 @@ func (us *UserService) RegisterRoutes(r *gin.RouterGroup) {
 	r.POST("/log", func(c *gin.Context) {
 		us.Login(c)
 	})
+	r.DELETE("/del", func(c *gin.Context) {
+		us.DelUser(c)
+	})
 }

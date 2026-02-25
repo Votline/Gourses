@@ -68,3 +68,28 @@ func (us *UserService) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"token": res.Token})
 }
+
+func (us *UserService) DelUser(c *gin.Context) {
+	req := struct {
+		DelUserID string `json:"delUserID" validate:"required,uuid"`
+	}{}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := us.val.Struct(req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "validation failed: " + err.Error()})
+		return
+	}
+
+	if _, err := us.client.DelUser(c.Request.Context(), &pb.DelReq{
+		DelUserId: req.DelUserID,
+	}); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Status(http.StatusOK)
+}

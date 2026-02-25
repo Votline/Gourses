@@ -11,7 +11,7 @@ Data:`
 `
 ProtoPath:../protos/users.proto
 Type:grpc
-Response:rpc error: code = Unknown desc = usersserver.RegUser: add to db: UsersPostgresDB.RegUser: insert user: pq: duplicate key value violates unique constraint "users_user_name_key" (23505)
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExNWExMTQyLTY0NTMtNGRmNC1hOTE2LWNiZGVlMGU1ZTkxOSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcxOTQ2MzM3fQ.ZvzTSuySbr9J3skB9zp-M8YpYI_niF2cJL1ldzKMNTc","sessionKey":"61c4b129-50a2-44d5-8921-9b989c385f9f","userId":"115a1142-6453-4df4-a916-cbdee0e5e919"}
 [\reg]
 
 [log]
@@ -26,22 +26,21 @@ Data:`
 `
 ProtoPath:../protos/users.proto
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3RhdGVzdEB0ZXN0LmNvbSIsInJvbGUiOiIxMjM0NTYiLCJleHAiOjE3NzE4NDgyMjh9.SJO1T1nt417Z20ljXMa62RclN2l7To2APqDeT7LeaNM","sessionKey":"248bc46f-fa17-47d3-bcf1-92b9bea7db8d","userId":"7b0a8646-e776-4960-aa7a-dd0506b2d38f"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExNWExMTQyLTY0NTMtNGRmNC1hOTE2LWNiZGVlMGU1ZTkxOSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcxOTQ2MzM3fQ.ZvzTSuySbr9J3skB9zp-M8YpYI_niF2cJL1ldzKMNTc","sessionKey":"76f0e250-a8ec-4f50-b178-5b71624a4aae","userId":"115a1142-6453-4df4-a916-cbdee0e5e919"}
 [\log]
 
-[log_rep]
-Target_ID:1
-Replace:`
-[rep]
+[del]
+Target:localhost:50051
+Endpoint:users.UsersService/DelUser
 Data:`
 	{
-		"name":"testa",
-		"email":"test@test.com",
-		"password":"123"
-	}`
-[\rep]
+		"token":"{RESPONSE id=1 json:token}",
+		"session_key":"{RESPONSE id=1 json:sessionKey}",
+		"del_user_id":"{RESPONSE id=1 json:userId}"
+	}
 `
-Type:repeat
-Response:rpc error: code = Unknown desc = usersserver.LogUser: check password: crypto/bcrypt: hashedPassword is not the hash of the given password
-[\log_rep]
+ProtoPath:../protos/users.proto
+Type:grpc
+Response:{}
+[\del]
 

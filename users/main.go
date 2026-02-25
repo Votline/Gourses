@@ -98,30 +98,19 @@ func (u *usersserver) LogUser(ctx context.Context, req *pb.LogReq) (res *pb.LogR
 	email := req.GetEmail()
 	pswd := req.GetPassword()
 
-	token, err := security.GenerateToken(name+email, pswd)
+	ui, err := u.db.LogUser(name + email)
+	if err != nil {
+		return nil, fmt.Errorf("%s: log user: %w", op, err)
+	}
+
+	token, err := security.GenerateToken(ui.ID, ui.Role)
 	if err != nil {
 		return nil, fmt.Errorf("%s: generate token: %w", op, err)
 	}
 
-	sk, err := u.rdb.NewSession(name+email, pswd)
+	sk, err := u.rdb.NewSession(ui.ID, ui.Role)
 	if err != nil {
 		return nil, fmt.Errorf("%s: create session: %w", op, err)
-	}
-
-	defer func() {
-		if err != nil {
-			if err := u.rdb.Delete(sk); err != nil {
-				u.log.Error("delete session",
-					zap.String("op", op),
-					zap.Error(err))
-			}
-		}
-	}()
-
-	ui, err := u.db.LogUser(name + email)
-	if err != nil {
-		u.log.Error(op, zap.Error(err))
-		return nil, fmt.Errorf("%s: log user: %w", op, err)
 	}
 
 	if err = security.Check(pswd, ui.Pswd); err != nil {
@@ -129,4 +118,28 @@ func (u *usersserver) LogUser(ctx context.Context, req *pb.LogReq) (res *pb.LogR
 	}
 
 	return &pb.LogRes{Token: token, SessionKey: sk, UserId: ui.ID}, nil
+}
+
+func (u *usersserver) DelUser(ctx context.Context, req *pb.DelReq) (*pb.DelRes, error) {
+	const op = "usersserver.DelUser"
+
+	token := req.GetToken()
+	sk := req.GetSessionKey()
+	delUserID := req.GetDelUserId()
+
+	info, err := security.ExtractJWTData(token)
+	if err != nil {
+		return nil, fmt.Errorf("%s: extract JWT data: %w", op, err)
+	}
+
+	if err := u.rdb.Validate(info.ID, info.Role, sk); err != nil {
+		return nil, fmt.Errorf("%s: validate session: %w", op, err)
+	}
+
+	if err := u.db.DelUser(info.Role, info.ID, delUserID); err != nil {
+		u.log.Error(op, zap.Error(err))
+		return nil, fmt.Errorf("%s: delete user: %w", op, err)
+	}
+
+	return &pb.DelRes{}, nil
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -48,6 +49,9 @@ func (r *RDB) NewSession(id, role string) (string, error) {
 	tx := r.rdb.TxPipeline()
 	defer tx.Close()
 
+	id = strings.TrimSpace(id)
+	role = strings.TrimSpace(role)
+
 	if err := tx.HSet(r.ctx, sk, map[string]string{
 		"id":   id,
 		"role": role,
@@ -69,16 +73,23 @@ func (r *RDB) NewSession(id, role string) (string, error) {
 func (r *RDB) Validate(id, role, sk string) error {
 	const op = "UsersRedisDB.Validate"
 
+	id = strings.TrimSpace(id)
+	role = strings.TrimSpace(role)
+
 	fields, err := r.rdb.HGetAll(r.ctx, sk).Result()
 	if err != nil {
-		return fmt.Errorf("%s: get hash: %w", op, err)
+		return fmt.Errorf("%q: get hash: %w", op, err)
 	}
 	if len(fields) == 0 {
-		return fmt.Errorf("%s: hash is empty", op)
+		return fmt.Errorf("%q: hash is empty", op)
+	}
+
+	if fields["role"] != role {
+		return fmt.Errorf("%s: invalid session", op)
 	}
 
 	if fields["id"] != id || fields["role"] != role {
-		return fmt.Errorf("%s: invalid session", op)
+		return fmt.Errorf("%q: invalid session", op)
 	}
 
 	return nil
