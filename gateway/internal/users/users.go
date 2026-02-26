@@ -3,6 +3,7 @@ package users
 import (
 	"os"
 
+	"gateway/internal/middlewares"
 	"gateway/internal/services"
 
 	pb "github.com/Votline/Gourses/protos/generated-users"
@@ -42,13 +43,13 @@ func (us *UserService) GetName() string {
 }
 
 func (us *UserService) RegisterRoutes(r *gin.RouterGroup) {
-	r.POST("/reg", func(c *gin.Context) {
-		us.Register(c)
-	})
-	r.POST("/log", func(c *gin.Context) {
-		us.Login(c)
-	})
-	r.DELETE("/del", func(c *gin.Context) {
-		us.DelUser(c)
-	})
+	r.POST("/reg", us.Register)
+	r.POST("/log", us.Login)
+
+	verifyGroup := r.Group("")
+	verifyGroup.Use(middlewares.JWTMiddleware())
+	verifyGroup.Use(middlewares.SessionKeyMiddleware())
+	{
+		verifyGroup.DELETE("/del/:del_user_id", us.DeleteUser)
+	}
 }

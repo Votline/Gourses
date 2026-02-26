@@ -7,6 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const redisTTL = 3600 * 24 * 30
+
 func (us *UserService) Register(c *gin.Context) {
 	req := struct {
 		Name     string `json:"name"     validate:"required"`
@@ -36,7 +38,14 @@ func (us *UserService) Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": res.Token})
+	c.SetCookie(
+		"session_key",
+		res.SessionKey,
+		redisTTL, "/", "localhost",
+		false, true,
+	)
+
+	c.JSON(http.StatusOK, gin.H{"token": res.Token, "user_id": res.UserId})
 }
 
 func (us *UserService) Login(c *gin.Context) {
@@ -66,28 +75,40 @@ func (us *UserService) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": res.Token})
+	c.SetCookie(
+		"session_key",
+		res.SessionKey,
+		redisTTL, "/", "localhost",
+		false, true,
+	)
+
+	c.JSON(http.StatusOK, gin.H{"token": res.Token, "user_id": res.UserId})
 }
 
-func (us *UserService) DelUser(c *gin.Context) {
+func (us *UserService) DeleteUser(c *gin.Context) {
 	req := struct {
-		DelUserID string `json:"delUserID" validate:"required,uuid"`
+		DelUserID  string `validate:"required,uuid"`
+		sessionKey string
+		token      string
 	}{}
 
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	req.DelUserID = c.Param("del_user_id")
+	req.sessionKey = c.GetString("session_key")
+	req.token = c.GetString("token")
 
 	if err := us.val.Struct(req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "validation failed: " + err.Error()})
+		c.JSON(http.StatusBadRequest,
+			gin.H{"error": "validation failed: " + err.Error()})
 		return
 	}
 
 	if _, err := us.client.DelUser(c.Request.Context(), &pb.DelReq{
-		DelUserId: req.DelUserID,
+		DelUserId:  req.DelUserID,
+		SessionKey: req.sessionKey,
+		Token:      req.token,
 	}); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError,
+			gin.H{"error": err.Error()})
 		return
 	}
 
