@@ -3,12 +3,14 @@ package users
 import (
 	"os"
 
+	"gateway/internal/cbreaker"
 	"gateway/internal/middlewares"
 	"gateway/internal/services"
 
 	pb "github.com/Votline/Gourses/protos/generated-users"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/sony/gobreaker/v2"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -19,6 +21,7 @@ type UserService struct {
 	val    *validator.Validate
 	conn   *grpc.ClientConn
 	client pb.UsersServiceClient
+	cb     *gobreaker.CircuitBreaker[any]
 }
 
 func New(log *zap.Logger) services.Service {
@@ -35,6 +38,7 @@ func New(log *zap.Logger) services.Service {
 		val:    validator.New(),
 		conn:   conn,
 		client: pb.NewUsersServiceClient(conn),
+		cb:     cbreaker.NewCircuitBreaker("users", log),
 	}
 }
 

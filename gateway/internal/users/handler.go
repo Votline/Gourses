@@ -3,6 +3,8 @@ package users
 import (
 	"net/http"
 
+	"gateway/internal/services"
+
 	pb "github.com/Votline/Gourses/protos/generated-users"
 	"github.com/gin-gonic/gin"
 )
@@ -27,11 +29,13 @@ func (us *UserService) Register(c *gin.Context) {
 		return
 	}
 
-	res, err := us.client.RegUser(c.Request.Context(), &pb.RegReq{
-		Name:     req.Name,
-		Email:    req.Email,
-		Role:     req.Role,
-		Password: req.Password,
+	res, err := services.Execute(us.cb, func() (*pb.RegRes, error) {
+		return us.client.RegUser(c.Request.Context(), &pb.RegReq{
+			Name:     req.Name,
+			Email:    req.Email,
+			Role:     req.Role,
+			Password: req.Password,
+		})
 	})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -65,10 +69,12 @@ func (us *UserService) Login(c *gin.Context) {
 		return
 	}
 
-	res, err := us.client.LogUser(c.Request.Context(), &pb.LogReq{
-		Name:     req.Name,
-		Email:    req.Email,
-		Password: req.Password,
+	res, err := services.Execute(us.cb, func() (*pb.LogRes, error) {
+		return us.client.LogUser(c.Request.Context(), &pb.LogReq{
+			Name:     req.Name,
+			Email:    req.Email,
+			Password: req.Password,
+		})
 	})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -102,10 +108,12 @@ func (us *UserService) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	if _, err := us.client.DelUser(c.Request.Context(), &pb.DelReq{
-		DelUserId:  req.DelUserID,
-		SessionKey: req.sessionKey,
-		Token:      req.token,
+	if _, err := services.Execute(us.cb, func() (*pb.DelRes, error) {
+		return us.client.DelUser(c.Request.Context(), &pb.DelReq{
+			DelUserId:  req.DelUserID,
+			SessionKey: req.sessionKey,
+			Token:      req.token,
+		})
 	}); err != nil {
 		c.JSON(http.StatusInternalServerError,
 			gin.H{"error": err.Error()})

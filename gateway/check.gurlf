@@ -11,7 +11,16 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"error":"rpc error: code = Unknown desc = usersserver.RegUser: add to db: UsersPostgresDB.RegUser: insert user: pq: duplicate key value violates unique constraint \"users_user_name_key\" (23505)"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhMmFhMTIzLTc3ZTItNGQzYS04MGUzLTJkZjU0MTUwODhmMSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjE4MjgyN30.dfObZ1sPl2PU3UWZa85KT2yNr_2xQXBAt7Rn3-qCr_M","user_id":"aa2aa123-77e2-4d3a-80e3-2df5415088f1"}
+CookieOut:`
+[localhost:8080]
+ session_key:93ed7d20-cc52-491c-97e4-16285d7685be
+ Path:/
+ Domain:localhost
+ Max-Age:2592000
+ HttpOnly:
+[\localhost:8080]
+`
 [\reg]
 
 [log]
@@ -26,10 +35,10 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdiNjBlZmExLTI3MTctNDk2OS04YmY2LTk1NGJlODNiODRmZiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjA5MzMzOH0.PTnZ4vAarUhWOrqv6GwNmN26tIkAgDjgQbhKyybU63Q","user_id":"7b60efa1-2717-4969-8bf6-954be83b84ff"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhMmFhMTIzLTc3ZTItNGQzYS04MGUzLTJkZjU0MTUwODhmMSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjE4MjgyN30.dfObZ1sPl2PU3UWZa85KT2yNr_2xQXBAt7Rn3-qCr_M","user_id":"aa2aa123-77e2-4d3a-80e3-2df5415088f1"}
 CookieOut:`
 [localhost:8080]
- session_key:205dad47-21cb-4cf1-86ac-7b4f3fc00aa4
+ session_key:9f4284c1-a184-420d-88cb-19692cadc591
  Path:/
  Domain:localhost
  Max-Age:2592000
