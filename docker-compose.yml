@@ -1,6 +1,32 @@
-version: '3.8'
-
 services:
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    networks:
+      - backend
+      - monitoring
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  users:
+    build:
+      context: .
+      dockerfile: users/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "${USERS_PORT}:${USERS_PORT}"
+    networks:
+      - backend
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:17
@@ -14,34 +40,56 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+      start_period: 5s
 
   redis_sk:
     image: redis:alpine
     ports:
       - "${REDIS_SK_PORT}:${REDIS_SK_PORT}"
+    networks:
+      - backend
     command:
       - redis-server
       - "--requirepass"
       - "${REDIS_SK_PSWD}"
+      - "--loglevel warning"
 
-  gateway:
-    build:
-      context: .
-      dockerfile: gateway/Dockerfile
-    env_file:
-      - .env
+  prometheus:
+    image: prom/prometheus
     ports:
-      - "${API_PORT}:${API_PORT}"
-    depends_on:
-      - postgres
+      - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
+    volumes:
+      - ./prometheus.yml:/prometheus/prometheus.yml
+    networks:
+      - monitoring
+    command:
+      - "--log.level=error"
 
-  users:
-    build:
-      context: .
-      dockerfile: users/Dockerfile
-    env_file:
-      - .env
+  grafana:
+    image: grafana/grafana
     ports:
-      - "${USERS_PORT}:${USERS_PORT}"
+      - "${GRAFANA_PORT}:${GRAFANA_PORT}"
+    environment:
+      - GF_LOG_LEVEL=error
+      - GL_SECURITY_ADMIN_PASSWORD="${GRAFANA_PASSWORD}"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - monitoring
     depends_on:
-      - postgres
+      - prometheus
+
+networks:
+  monitoring:
+    driver: bridge
+  backend:
+    driver: bridge
+volumes:
+  grafana-data:

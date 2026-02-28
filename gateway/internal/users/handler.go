@@ -11,7 +11,7 @@ import (
 
 const redisTTL = 3600 * 24 * 30
 
-func (us *UserService) Register(c *gin.Context) {
+func (us *UsersService) Register(c *gin.Context) {
 	req := struct {
 		Name     string `json:"name"     validate:"required"`
 		Email    string `json:"email"    validate:"required,email"`
@@ -52,7 +52,7 @@ func (us *UserService) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"token": res.Token, "user_id": res.UserId})
 }
 
-func (us *UserService) Login(c *gin.Context) {
+func (us *UsersService) Login(c *gin.Context) {
 	req := struct {
 		Name     string `json:"name"     validate:"required"`
 		Email    string `json:"email"    validate:"required,email"`
@@ -91,7 +91,7 @@ func (us *UserService) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"token": res.Token, "user_id": res.UserId})
 }
 
-func (us *UserService) DeleteUser(c *gin.Context) {
+func (us *UsersService) DeleteUser(c *gin.Context) {
 	req := struct {
 		DelUserID  string `validate:"required,uuid"`
 		sessionKey string

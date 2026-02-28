@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sony/gobreaker/v2"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -13,6 +14,8 @@ import (
 type Service interface {
 	GetName() string
 	RegisterRoutes(r *gin.RouterGroup)
+	IncrCounter(name string)
+	NewTimer(name, method string) *prometheus.Timer
 }
 
 func Execute[T any](cb *gobreaker.CircuitBreaker[any], fn func() (T, error)) (T, error) {
