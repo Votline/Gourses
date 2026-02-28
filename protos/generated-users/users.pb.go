@@ -271,9 +271,10 @@ func (x *LogRes) GetUserId() string {
 
 type DelReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
-	SessionKey    string                 `protobuf:"bytes,2,opt,name=session_key,json=sessionKey,proto3" json:"session_key,omitempty"`
-	DelUserId     string                 `protobuf:"bytes,3,opt,name=del_user_id,json=delUserId,proto3" json:"del_user_id,omitempty"`
+	SessionKey    string                 `protobuf:"bytes,1,opt,name=session_key,json=sessionKey,proto3" json:"session_key,omitempty"`
+	DelUserId     string                 `protobuf:"bytes,2,opt,name=del_user_id,json=delUserId,proto3" json:"del_user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserRole      string                 `protobuf:"bytes,4,opt,name=user_role,json=userRole,proto3" json:"user_role,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -308,13 +309,6 @@ func (*DelReq) Descriptor() ([]byte, []int) {
 	return file_users_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *DelReq) GetToken() string {
-	if x != nil {
-		return x.Token
-	}
-	return ""
-}
-
 func (x *DelReq) GetSessionKey() string {
 	if x != nil {
 		return x.SessionKey
@@ -325,6 +319,20 @@ func (x *DelReq) GetSessionKey() string {
 func (x *DelReq) GetDelUserId() string {
 	if x != nil {
 		return x.DelUserId
+	}
+	return ""
+}
+
+func (x *DelReq) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *DelReq) GetUserRole() string {
+	if x != nil {
+		return x.UserRole
 	}
 	return ""
 }
@@ -365,6 +373,102 @@ func (*DelRes) Descriptor() ([]byte, []int) {
 	return file_users_proto_rawDescGZIP(), []int{5}
 }
 
+type ValidateReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	SessionKey    string                 `protobuf:"bytes,2,opt,name=session_key,json=sessionKey,proto3" json:"session_key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ValidateReq) Reset() {
+	*x = ValidateReq{}
+	mi := &file_users_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateReq) ProtoMessage() {}
+
+func (x *ValidateReq) ProtoReflect() protoreflect.Message {
+	mi := &file_users_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateReq.ProtoReflect.Descriptor instead.
+func (*ValidateReq) Descriptor() ([]byte, []int) {
+	return file_users_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ValidateReq) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *ValidateReq) GetSessionKey() string {
+	if x != nil {
+		return x.SessionKey
+	}
+	return ""
+}
+
+type ValidateRes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ValidateRes) Reset() {
+	*x = ValidateRes{}
+	mi := &file_users_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateRes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateRes) ProtoMessage() {}
+
+func (x *ValidateRes) ProtoReflect() protoreflect.Message {
+	mi := &file_users_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateRes.ProtoReflect.Descriptor instead.
+func (*ValidateRes) Descriptor() ([]byte, []int) {
+	return file_users_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ValidateRes) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
 var File_users_proto protoreflect.FileDescriptor
 
 const file_users_proto_rawDesc = "" +
@@ -388,17 +492,25 @@ const file_users_proto_rawDesc = "" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1f\n" +
 	"\vsession_key\x18\x02 \x01(\tR\n" +
 	"sessionKey\x12\x17\n" +
-	"\auser_id\x18\x03 \x01(\tR\x06userId\"_\n" +
-	"\x06DelReq\x12\x14\n" +
+	"\auser_id\x18\x03 \x01(\tR\x06userId\"\x7f\n" +
+	"\x06DelReq\x12\x1f\n" +
+	"\vsession_key\x18\x01 \x01(\tR\n" +
+	"sessionKey\x12\x1e\n" +
+	"\vdel_user_id\x18\x02 \x01(\tR\tdelUserId\x12\x17\n" +
+	"\auser_id\x18\x03 \x01(\tR\x06userId\x12\x1b\n" +
+	"\tuser_role\x18\x04 \x01(\tR\buserRole\"\b\n" +
+	"\x06DelRes\"D\n" +
+	"\vValidateReq\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1f\n" +
 	"\vsession_key\x18\x02 \x01(\tR\n" +
-	"sessionKey\x12\x1e\n" +
-	"\vdel_user_id\x18\x03 \x01(\tR\tdelUserId\"\b\n" +
-	"\x06DelRes2\x89\x01\n" +
+	"sessionKey\"#\n" +
+	"\vValidateRes\x12\x14\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token2\xc1\x01\n" +
 	"\fUsersService\x12'\n" +
 	"\aRegUser\x12\r.users.RegReq\x1a\r.users.RegRes\x12'\n" +
 	"\aLogUser\x12\r.users.LogReq\x1a\r.users.LogRes\x12'\n" +
-	"\aDelUser\x12\r.users.DelReq\x1a\r.users.DelResB\x11Z\x0f./;usersserviceb\x06proto3"
+	"\aDelUser\x12\r.users.DelReq\x1a\r.users.DelRes\x126\n" +
+	"\fValidateUser\x12\x12.users.ValidateReq\x1a\x12.users.ValidateResB\x11Z\x0f./;usersserviceb\x06proto3"
 
 var (
 	file_users_proto_rawDescOnce sync.Once
@@ -412,24 +524,28 @@ func file_users_proto_rawDescGZIP() []byte {
 	return file_users_proto_rawDescData
 }
 
-var file_users_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_users_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_users_proto_goTypes = []any{
-	(*RegReq)(nil), // 0: users.RegReq
-	(*RegRes)(nil), // 1: users.RegRes
-	(*LogReq)(nil), // 2: users.LogReq
-	(*LogRes)(nil), // 3: users.LogRes
-	(*DelReq)(nil), // 4: users.DelReq
-	(*DelRes)(nil), // 5: users.DelRes
+	(*RegReq)(nil),      // 0: users.RegReq
+	(*RegRes)(nil),      // 1: users.RegRes
+	(*LogReq)(nil),      // 2: users.LogReq
+	(*LogRes)(nil),      // 3: users.LogRes
+	(*DelReq)(nil),      // 4: users.DelReq
+	(*DelRes)(nil),      // 5: users.DelRes
+	(*ValidateReq)(nil), // 6: users.ValidateReq
+	(*ValidateRes)(nil), // 7: users.ValidateRes
 }
 var file_users_proto_depIdxs = []int32{
 	0, // 0: users.UsersService.RegUser:input_type -> users.RegReq
 	2, // 1: users.UsersService.LogUser:input_type -> users.LogReq
 	4, // 2: users.UsersService.DelUser:input_type -> users.DelReq
-	1, // 3: users.UsersService.RegUser:output_type -> users.RegRes
-	3, // 4: users.UsersService.LogUser:output_type -> users.LogRes
-	5, // 5: users.UsersService.DelUser:output_type -> users.DelRes
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	6, // 3: users.UsersService.ValidateUser:input_type -> users.ValidateReq
+	1, // 4: users.UsersService.RegUser:output_type -> users.RegRes
+	3, // 5: users.UsersService.LogUser:output_type -> users.LogRes
+	5, // 6: users.UsersService.DelUser:output_type -> users.DelRes
+	7, // 7: users.UsersService.ValidateUser:output_type -> users.ValidateRes
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -446,7 +562,7 @@ func file_users_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_users_proto_rawDesc), len(file_users_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

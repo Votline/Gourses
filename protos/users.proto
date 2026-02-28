@@ -27,14 +27,24 @@ message LogRes {
 }
 
 message DelReq {
-  string token = 1;
-  string session_key = 2;
-  string del_user_id = 3;
+  string session_key = 1;
+  string del_user_id = 2;
+  string user_id = 3;
+  string user_role = 4;
 }
 message DelRes {}
+
+message ValidateReq {
+  string token = 1;
+  string session_key = 2;
+}
+message ValidateRes {
+  string token = 1;
+}
 
 service UsersService {
   rpc RegUser (RegReq) returns (RegRes);
   rpc LogUser (LogReq) returns (LogRes);
   rpc DelUser (DelReq) returns (DelRes);
+  rpc ValidateUser (ValidateReq) returns (ValidateRes);
 }

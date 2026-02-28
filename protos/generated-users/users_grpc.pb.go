@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UsersService_RegUser_FullMethodName = "/users.UsersService/RegUser"
-	UsersService_LogUser_FullMethodName = "/users.UsersService/LogUser"
-	UsersService_DelUser_FullMethodName = "/users.UsersService/DelUser"
+	UsersService_RegUser_FullMethodName      = "/users.UsersService/RegUser"
+	UsersService_LogUser_FullMethodName      = "/users.UsersService/LogUser"
+	UsersService_DelUser_FullMethodName      = "/users.UsersService/DelUser"
+	UsersService_ValidateUser_FullMethodName = "/users.UsersService/ValidateUser"
 )
 
 // UsersServiceClient is the client API for UsersService service.
@@ -31,6 +32,7 @@ type UsersServiceClient interface {
 	RegUser(ctx context.Context, in *RegReq, opts ...grpc.CallOption) (*RegRes, error)
 	LogUser(ctx context.Context, in *LogReq, opts ...grpc.CallOption) (*LogRes, error)
 	DelUser(ctx context.Context, in *DelReq, opts ...grpc.CallOption) (*DelRes, error)
+	ValidateUser(ctx context.Context, in *ValidateReq, opts ...grpc.CallOption) (*ValidateRes, error)
 }
 
 type usersServiceClient struct {
@@ -71,6 +73,16 @@ func (c *usersServiceClient) DelUser(ctx context.Context, in *DelReq, opts ...gr
 	return out, nil
 }
 
+func (c *usersServiceClient) ValidateUser(ctx context.Context, in *ValidateReq, opts ...grpc.CallOption) (*ValidateRes, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ValidateRes)
+	err := c.cc.Invoke(ctx, UsersService_ValidateUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UsersServiceServer is the server API for UsersService service.
 // All implementations must embed UnimplementedUsersServiceServer
 // for forward compatibility.
@@ -78,6 +90,7 @@ type UsersServiceServer interface {
 	RegUser(context.Context, *RegReq) (*RegRes, error)
 	LogUser(context.Context, *LogReq) (*LogRes, error)
 	DelUser(context.Context, *DelReq) (*DelRes, error)
+	ValidateUser(context.Context, *ValidateReq) (*ValidateRes, error)
 	mustEmbedUnimplementedUsersServiceServer()
 }
 
@@ -96,6 +109,9 @@ func (UnimplementedUsersServiceServer) LogUser(context.Context, *LogReq) (*LogRe
 }
 func (UnimplementedUsersServiceServer) DelUser(context.Context, *DelReq) (*DelRes, error) {
 	return nil, status.Error(codes.Unimplemented, "method DelUser not implemented")
+}
+func (UnimplementedUsersServiceServer) ValidateUser(context.Context, *ValidateReq) (*ValidateRes, error) {
+	return nil, status.Error(codes.Unimplemented, "method ValidateUser not implemented")
 }
 func (UnimplementedUsersServiceServer) mustEmbedUnimplementedUsersServiceServer() {}
 func (UnimplementedUsersServiceServer) testEmbeddedByValue()                      {}
@@ -172,6 +188,24 @@ func _UsersService_DelUser_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UsersService_ValidateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ValidateReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsersServiceServer).ValidateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UsersService_ValidateUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsersServiceServer).ValidateUser(ctx, req.(*ValidateReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UsersService_ServiceDesc is the grpc.ServiceDesc for UsersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +224,10 @@ var UsersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DelUser",
 			Handler:    _UsersService_DelUser_Handler,
+		},
+		{
+			MethodName: "ValidateUser",
+			Handler:    _UsersService_ValidateUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
