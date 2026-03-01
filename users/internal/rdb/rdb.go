@@ -7,6 +7,8 @@ import (
 	"strings"
 	"time"
 
+	"users/internal/security"
+
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -93,6 +95,32 @@ func (r *RDB) Validate(id, role, sk string) error {
 	}
 
 	return nil
+}
+
+func (r *RDB) Extract(sk string) (security.UserInfo, error) {
+	const op = "UsersRedisDB.Extract"
+
+	fields, err := r.rdb.HGetAll(r.ctx, sk).Result()
+	if err != nil {
+		return security.UserInfo{}, fmt.Errorf("%q: get hash: %w", op, err)
+	}
+	if len(fields) == 0 {
+		return security.UserInfo{}, fmt.Errorf("%q: hash is empty", op)
+	}
+
+	id, ok := fields["id"]
+	if !ok {
+		return security.UserInfo{}, fmt.Errorf("%q: id is empty", op)
+	}
+	role, ok := fields["role"]
+	if !ok {
+		return security.UserInfo{}, fmt.Errorf("%q: role is empty", op)
+	}
+
+	return security.UserInfo{
+		ID:   id,
+		Role: role,
+	}, nil
 }
 
 func (r *RDB) Delete(sk string) error {

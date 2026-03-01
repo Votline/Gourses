@@ -10,9 +10,10 @@ import (
 )
 
 type UserInfo struct {
-	ID   string `json:"id"`
-	Role string `json:"role"`
-	Pswd string `json:"-"`
+	ID    string `json:"id"`
+	Role  string `json:"role"`
+	Pswd  string `json:"-"`
+	token *jwt.Token
 	jwt.RegisteredClaims
 }
 
@@ -44,9 +45,23 @@ func GenerateToken(id, role string) (string, error) {
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
 
-func ExtractJWTData(tokenStr string) (UserInfo, error) {
+func ExtractClaims(tokenStr string) (UserInfo, error) {
+	claims, err := ExtractUnverifiedClaims(tokenStr)
+	if err != nil {
+		return UserInfo{}, err
+	}
+
+	if !claims.token.Valid {
+		return UserInfo{}, fmt.Errorf("token is invalid")
+	}
+
+	return claims, nil
+}
+
+func ExtractUnverifiedClaims(tokenStr string) (UserInfo, error) {
 	claims := UserInfo{}
-	token, err := jwt.ParseWithClaims(tokenStr, &claims, func(token *jwt.Token) (any, error) {
+	parser := jwt.NewParser(jwt.WithoutClaimsValidation())
+	token, err := parser.ParseWithClaims(tokenStr, &claims, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
@@ -56,9 +71,7 @@ func ExtractJWTData(tokenStr string) (UserInfo, error) {
 		return UserInfo{}, err
 	}
 
-	if !token.Valid {
-		return UserInfo{}, fmt.Errorf("token is not valid")
-	}
+	claims.token = token
 
 	return claims, nil
 }

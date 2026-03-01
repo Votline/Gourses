@@ -1,6 +1,7 @@
 package users
 
 import (
+	"context"
 	"net/http"
 
 	"gateway/internal/services"
@@ -95,12 +96,14 @@ func (us *UsersService) DeleteUser(c *gin.Context) {
 	req := struct {
 		DelUserID  string `validate:"required,uuid"`
 		sessionKey string
-		token      string
+		user_id    string
+		user_role  string
 	}{}
 
 	req.DelUserID = c.Param("del_user_id")
 	req.sessionKey = c.GetString("session_key")
-	req.token = c.GetString("token")
+	req.user_id = c.GetString("user_id")
+	req.user_role = c.GetString("user_role")
 
 	if err := us.val.Struct(req); err != nil {
 		c.JSON(http.StatusBadRequest,
@@ -112,7 +115,8 @@ func (us *UsersService) DeleteUser(c *gin.Context) {
 		return us.client.DelUser(c.Request.Context(), &pb.DelReq{
 			DelUserId:  req.DelUserID,
 			SessionKey: req.sessionKey,
-			Token:      req.token,
+			UserId:     req.user_id,
+			UserRole:   req.user_role,
 		})
 	}); err != nil {
 		c.JSON(http.StatusInternalServerError,
@@ -121,4 +125,17 @@ func (us *UsersService) DeleteUser(c *gin.Context) {
 	}
 
 	c.Status(http.StatusOK)
+}
+
+func (us *UsersService) Validate(ctx context.Context, tokenStr, sessionKey string) (*pb.ValidateRes, error) {
+	res, err := services.Execute(us.cb, func() (*pb.ValidateRes, error) {
+		return us.client.ValidateUser(ctx, &pb.ValidateReq{
+			Token: tokenStr,
+		})
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }

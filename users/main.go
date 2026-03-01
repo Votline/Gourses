@@ -123,23 +123,47 @@ func (u *usersserver) LogUser(ctx context.Context, req *pb.LogReq) (res *pb.LogR
 func (u *usersserver) DelUser(ctx context.Context, req *pb.DelReq) (*pb.DelRes, error) {
 	const op = "usersserver.DelUser"
 
-	token := req.GetToken()
+	id := req.GetUserId()
+	role := req.GetUserRole()
 	sk := req.GetSessionKey()
 	delUserID := req.GetDelUserId()
 
-	info, err := security.ExtractJWTData(token)
-	if err != nil {
-		return nil, fmt.Errorf("%s: extract JWT data: %w", op, err)
-	}
-
-	if err := u.rdb.Validate(info.ID, info.Role, sk); err != nil {
+	if err := u.rdb.Validate(id, role, sk); err != nil {
 		return nil, fmt.Errorf("%s: validate session: %w", op, err)
 	}
 
-	if err := u.db.DelUser(info.Role, info.ID, delUserID); err != nil {
+	if err := u.db.DelUser(id, role, delUserID); err != nil {
 		u.log.Error(op, zap.Error(err))
 		return nil, fmt.Errorf("%s: delete user: %w", op, err)
 	}
 
 	return &pb.DelRes{}, nil
+}
+
+func (u *usersserver) ValidateUser(ctx context.Context, req *pb.ValidateReq) (*pb.ValidateRes, error) {
+	const op = "usersserver.ValidateUser"
+
+	token := req.GetToken()
+	sk := req.GetSessionKey()
+
+	userInfo, err := security.ExtractUnverifiedClaims(token)
+	if err != nil {
+		return nil, fmt.Errorf("%s: extract user info: %w", op, err)
+	}
+
+	if err := u.rdb.Validate(userInfo.ID, userInfo.Role, sk); err != nil {
+		return nil, fmt.Errorf("%s: validate session: %w", op, err)
+	}
+
+	userInfo, err = u.rdb.Extract(sk)
+	if err != nil {
+		return nil, fmt.Errorf("%s: extract user info: %w", op, err)
+	}
+
+	newToken, err := security.GenerateToken(userInfo.ID, userInfo.Role)
+	if err != nil {
+		return nil, fmt.Errorf("%s: generate token: %w", op, err)
+	}
+
+	return &pb.ValidateRes{Token: newToken}, nil
 }

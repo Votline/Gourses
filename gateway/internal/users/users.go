@@ -64,7 +64,7 @@ func (us *UsersService) RegisterRoutes(r *gin.RouterGroup) {
 	r.POST("/log", us.Login)
 
 	verifyGroup := r.Group("")
-	verifyGroup.Use(middlewares.JWTMiddleware())
+	verifyGroup.Use(middlewares.JWTMiddleware(us.Validate))
 	verifyGroup.Use(middlewares.SessionKeyMiddleware())
 	{
 		verifyGroup.DELETE("/del/:del_user_id", us.DeleteUser)

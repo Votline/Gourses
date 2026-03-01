@@ -89,7 +89,7 @@ func (d *DB) LogUser(username string) (security.UserInfo, error) {
 	return ui, nil
 }
 
-func (d *DB) DelUser(role, id, delUserID string) error {
+func (d *DB) DelUser(id, role, delUserID string) error {
 	const op = "UsersPostgresDB.DelUser"
 
 	tx, err := d.db.Beginx()
