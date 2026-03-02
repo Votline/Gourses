@@ -95,15 +95,15 @@ func (us *UsersService) Login(c *gin.Context) {
 func (us *UsersService) DeleteUser(c *gin.Context) {
 	req := struct {
 		DelUserID  string `validate:"required,uuid"`
-		sessionKey string
-		user_id    string
-		user_role  string
+		SessionKey string `validate:"required,uuid"`
+		UserID     string `validate:"required,uuid"`
+		UserRole   string `validate:"required,oneof=admin user guest dev"`
 	}{}
 
 	req.DelUserID = c.Param("del_user_id")
-	req.sessionKey = c.GetString("session_key")
-	req.user_id = c.GetString("user_id")
-	req.user_role = c.GetString("user_role")
+	req.SessionKey = c.GetString("session_key")
+	req.UserID = c.GetString("user_id")
+	req.UserRole = c.GetString("user_role")
 
 	if err := us.val.Struct(req); err != nil {
 		c.JSON(http.StatusBadRequest,
@@ -114,9 +114,9 @@ func (us *UsersService) DeleteUser(c *gin.Context) {
 	if _, err := services.Execute(us.cb, func() (*pb.DelRes, error) {
 		return us.client.DelUser(c.Request.Context(), &pb.DelReq{
 			DelUserId:  req.DelUserID,
-			SessionKey: req.sessionKey,
-			UserId:     req.user_id,
-			UserRole:   req.user_role,
+			SessionKey: req.SessionKey,
+			UserId:     req.UserID,
+			UserRole:   req.UserRole,
 		})
 	}); err != nil {
 		c.JSON(http.StatusInternalServerError,

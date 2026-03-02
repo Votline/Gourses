@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"gateway/internal/courses"
 	"gateway/internal/services"
 	"gateway/internal/users"
 
@@ -29,7 +30,12 @@ func Init(log *zap.Logger) *gin.Engine {
 }
 
 func initServices(r *gin.Engine, log *zap.Logger) {
-	svcs := [1]services.Service{users.New(log, resTime)}
+	us := users.New(log, resTime).(*users.UsersService)
+	svcs := [2]services.Service{
+		us,
+		courses.New(log, resTime, us.Validate),
+	}
+
 	for _, svc := range svcs {
 		path := "/api/" + svc.GetName()
 		group := r.Group(path)

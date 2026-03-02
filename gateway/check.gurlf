@@ -11,10 +11,10 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY5MTY1ZDczLWY1YmEtNGI3Ni1iODQzLTVjNzA1NDIxNjg0YiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjI3NzQ2MH0.hPJxWdpf-rMNrHBI8IgWxqmgAlQxeR1dZO8rHaI_Mak","user_id":"f9165d73-f5ba-4b76-b843-5c705421684b"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY0YWUyZDI4LWE2ZTgtNGZkYy05YTk5LTg3NGY2YmJjNTU4MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjQ2NjUyMn0.ZCWdlPGAnnFy6ddD37bI5r27CnVkplYnT8k7ugP5Nqc","user_id":"f4ae2d28-a6e8-4fdc-9a99-874f6bbc5582"}
 CookieOut:`
 [localhost:8080]
- session_key:3d5864fc-6280-47a6-8af3-89e51b423e9b
+ session_key:ac178138-4ca6-4e1a-a1ab-8ee62930f55a
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -35,10 +35,10 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY5MTY1ZDczLWY1YmEtNGI3Ni1iODQzLTVjNzA1NDIxNjg0YiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjI3NzQ2MH0.hPJxWdpf-rMNrHBI8IgWxqmgAlQxeR1dZO8rHaI_Mak","user_id":"f9165d73-f5ba-4b76-b843-5c705421684b"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY0YWUyZDI4LWE2ZTgtNGZkYy05YTk5LTg3NGY2YmJjNTU4MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjQ2NjUyMn0.ZCWdlPGAnnFy6ddD37bI5r27CnVkplYnT8k7ugP5Nqc","user_id":"f4ae2d28-a6e8-4fdc-9a99-874f6bbc5582"}
 CookieOut:`
 [localhost:8080]
- session_key:5de1b2fc-d450-408f-8458-a9601326852c
+ session_key:d9d1b743-175d-4836-bff9-33957fee44de
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -46,6 +46,20 @@ CookieOut:`
 [\localhost:8080]
 `
 [\log]
+
+[new_course]
+URL:http://localhost:8080/api/courses/new
+Method:POST
+Body:`
+	{"name": "some", "desc": "some more", "price": "12345"}
+`
+Headers:`
+	Content-Type: application/json
+	Authorization: Bearer {RESPONSE id=1 json:token}
+`
+Type:http
+Response:{"course_id":"e66b53f4-87eb-41f1-a701-fafb59a1741f"}
+[\new_course]
 
 [del]
 URL:http://localhost:8080/api/users/del/{RESPONSE id=1 json:user_id}

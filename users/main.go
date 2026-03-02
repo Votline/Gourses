@@ -52,6 +52,7 @@ func main() {
 	if err := srv.Serve(lis); err != nil {
 		log.Fatal("Failed to serve", zap.Error(err))
 	}
+	defer srv.Stop()
 }
 
 func (u *usersserver) RegUser(ctx context.Context, req *pb.RegReq) (*pb.RegRes, error) {

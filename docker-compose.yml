@@ -28,6 +28,19 @@ services:
     depends_on:
       - postgres
 
+  courses:
+    build:
+      context: .
+      dockerfile: courses/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "${COURSES_PORT}:${COURSES_PORT}"
+    networks:
+      - backend
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:17
     ports:
@@ -36,6 +49,7 @@ services:
       - .env
     volumes:
       - ./users/init.sql:/docker-entrypoint-initdb.d/1-users.sql:ro
+      - ./courses/init.sql:/docker-entrypoint-initdb.d/1-courses.sql:ro
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}

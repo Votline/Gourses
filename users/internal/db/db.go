@@ -30,18 +30,18 @@ func NewDB(log *zap.Logger) (*DB, error) {
 			continue
 		}
 
-		db.SetMaxIdleConns(10)
-		db.SetMaxOpenConns(20)
-		db.SetConnMaxLifetime(5 * time.Minute)
-		db.SetConnMaxIdleTime(5 * time.Minute)
-
 		break
 	}
+
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(20)
+	db.SetConnMaxLifetime(10 * time.Minute)
+	db.SetConnMaxIdleTime(5 * time.Minute)
 
 	return &DB{
 		db: db,
 		bd: sq.StatementBuilder.PlaceholderFormat(sq.Dollar),
-	}, err
+	}, nil
 }
 
 func (d *DB) Close() error {
