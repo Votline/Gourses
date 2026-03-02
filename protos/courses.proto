@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package courses;
+option go_package = "./;coursesservice";
+
+message NewCourseReq {
+  string user_id = 1;
+  string user_role = 2;
+  string name = 3;
+  string desciption = 4;
+  string price = 5;
+}
+message NewCourseRes {
+  string course_id = 1;
+}
+
+message GetCoursesReq {
+  string course_id = 1;
+}
+message GetCoursesRes {
+  string course_id = 1;
+  string name = 2;
+  string desciption = 3;
+  string price = 4;
+}
+
+message DeleteCourseReq {
+  string course_id = 1;
+  string user_id = 2;
+  string user_role = 3;
+}
+message DeleteCourseRes {}
+
+service CoursesService {
+  rpc NewCourse (NewCourseReq) returns (NewCourseRes);
+  rpc GetCourses (GetCoursesReq) returns (GetCoursesRes);
+  rpc DeleteCourse (DeleteCourseReq) returns (DeleteCourseRes);
+}
