@@ -17,6 +17,12 @@ type DB struct {
 	bd sq.StatementBuilderType
 }
 
+type CourseInfo struct {
+	Name  string `db:"name"`
+	Desc  string `db:"description"`
+	Price string `db:"price"`
+}
+
 func NewDB(log *zap.Logger) (*DB, error) {
 	var db *sqlx.DB
 	var err error
@@ -65,4 +71,23 @@ func (d *DB) NewCourse(id, name, desc, price, userID, userRole string) error {
 	}
 
 	return nil
+}
+
+func (d *DB) GetCourse(id string) (*CourseInfo, error) {
+	const op = "db.GetCourses"
+
+	query, args, err := d.bd.Select("name", "description", "price").
+		From("courses").
+		Where(sq.Eq{"id": id}).
+		ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("%s: get query: %w", op, err)
+	}
+
+	courseInfo := CourseInfo{}
+	if err := d.db.Get(&courseInfo, query, args...); err != nil {
+		return nil, fmt.Errorf("%s: get course: %w", op, err)
+	}
+
+	return &courseInfo, nil
 }

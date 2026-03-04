@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	CoursesService_NewCourse_FullMethodName    = "/courses.CoursesService/NewCourse"
-	CoursesService_GetCourses_FullMethodName   = "/courses.CoursesService/GetCourses"
+	CoursesService_GetCourse_FullMethodName    = "/courses.CoursesService/GetCourse"
 	CoursesService_DeleteCourse_FullMethodName = "/courses.CoursesService/DeleteCourse"
 )
 
@@ -29,7 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CoursesServiceClient interface {
 	NewCourse(ctx context.Context, in *NewCourseReq, opts ...grpc.CallOption) (*NewCourseRes, error)
-	GetCourses(ctx context.Context, in *GetCoursesReq, opts ...grpc.CallOption) (*GetCoursesRes, error)
+	GetCourse(ctx context.Context, in *GetCourseReq, opts ...grpc.CallOption) (*GetCourseRes, error)
 	DeleteCourse(ctx context.Context, in *DeleteCourseReq, opts ...grpc.CallOption) (*DeleteCourseRes, error)
 }
 
@@ -51,10 +51,10 @@ func (c *coursesServiceClient) NewCourse(ctx context.Context, in *NewCourseReq, 
 	return out, nil
 }
 
-func (c *coursesServiceClient) GetCourses(ctx context.Context, in *GetCoursesReq, opts ...grpc.CallOption) (*GetCoursesRes, error) {
+func (c *coursesServiceClient) GetCourse(ctx context.Context, in *GetCourseReq, opts ...grpc.CallOption) (*GetCourseRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetCoursesRes)
-	err := c.cc.Invoke(ctx, CoursesService_GetCourses_FullMethodName, in, out, cOpts...)
+	out := new(GetCourseRes)
+	err := c.cc.Invoke(ctx, CoursesService_GetCourse_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (c *coursesServiceClient) DeleteCourse(ctx context.Context, in *DeleteCours
 // for forward compatibility.
 type CoursesServiceServer interface {
 	NewCourse(context.Context, *NewCourseReq) (*NewCourseRes, error)
-	GetCourses(context.Context, *GetCoursesReq) (*GetCoursesRes, error)
+	GetCourse(context.Context, *GetCourseReq) (*GetCourseRes, error)
 	DeleteCourse(context.Context, *DeleteCourseReq) (*DeleteCourseRes, error)
 	mustEmbedUnimplementedCoursesServiceServer()
 }
@@ -91,8 +91,8 @@ type UnimplementedCoursesServiceServer struct{}
 func (UnimplementedCoursesServiceServer) NewCourse(context.Context, *NewCourseReq) (*NewCourseRes, error) {
 	return nil, status.Error(codes.Unimplemented, "method NewCourse not implemented")
 }
-func (UnimplementedCoursesServiceServer) GetCourses(context.Context, *GetCoursesReq) (*GetCoursesRes, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetCourses not implemented")
+func (UnimplementedCoursesServiceServer) GetCourse(context.Context, *GetCourseReq) (*GetCourseRes, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetCourse not implemented")
 }
 func (UnimplementedCoursesServiceServer) DeleteCourse(context.Context, *DeleteCourseReq) (*DeleteCourseRes, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteCourse not implemented")
@@ -136,20 +136,20 @@ func _CoursesService_NewCourse_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CoursesService_GetCourses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCoursesReq)
+func _CoursesService_GetCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCourseReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoursesServiceServer).GetCourses(ctx, in)
+		return srv.(CoursesServiceServer).GetCourse(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CoursesService_GetCourses_FullMethodName,
+		FullMethod: CoursesService_GetCourse_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoursesServiceServer).GetCourses(ctx, req.(*GetCoursesReq))
+		return srv.(CoursesServiceServer).GetCourse(ctx, req.(*GetCourseReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -184,8 +184,8 @@ var CoursesService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CoursesService_NewCourse_Handler,
 		},
 		{
-			MethodName: "GetCourses",
-			Handler:    _CoursesService_GetCourses_Handler,
+			MethodName: "GetCourse",
+			Handler:    _CoursesService_GetCourse_Handler,
 		},
 		{
 			MethodName: "DeleteCourse",

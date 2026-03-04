@@ -7,17 +7,17 @@ message NewCourseReq {
   string user_id = 1;
   string user_role = 2;
   string name = 3;
-  string desciption = 4;
+  string description = 4;
   string price = 5;
 }
 message NewCourseRes {
   string course_id = 1;
 }
 
-message GetCoursesReq {
+message GetCourseReq {
   string course_id = 1;
 }
-message GetCoursesRes {
+message GetCourseRes {
   string course_id = 1;
   string name = 2;
   string desciption = 3;
@@ -33,6 +33,6 @@ message DeleteCourseRes {}
 
 service CoursesService {
   rpc NewCourse (NewCourseReq) returns (NewCourseRes);
-  rpc GetCourses (GetCoursesReq) returns (GetCoursesRes);
+  rpc GetCourse (GetCourseReq) returns (GetCourseRes);
   rpc DeleteCourse (DeleteCourseReq) returns (DeleteCourseRes);
 }

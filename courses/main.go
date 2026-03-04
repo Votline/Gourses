@@ -63,3 +63,22 @@ func (c *coursesservice) NewCourse(ctx context.Context, req *pb.NewCourseReq) (*
 
 	return &pb.NewCourseRes{CourseId: id}, nil
 }
+
+func (c *coursesservice) GetCourses(ctx context.Context, req *pb.GetCoursesReq) (*pb.GetCoursesRes, error) {
+	const op = "courses.GetCourses"
+
+	coursesID := req.GetCourseId()
+
+	courseInfo, err := c.db.GetCourse(coursesID)
+	if err != nil {
+		c.log.Error(op, zap.Error(err))
+		return nil, fmt.Errorf("%s: get courses: %w", op, err)
+	}
+
+	return &pb.GetCoursesRes{
+		CourseId:   coursesID,
+		Name:       courseInfo.Name,
+		Desciption: courseInfo.Desc,
+		Price:      courseInfo.Price,
+	}, nil
+}
