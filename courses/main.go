@@ -51,7 +51,7 @@ func (c *coursesservice) NewCourse(ctx context.Context, req *pb.NewCourseReq) (*
 	userID := req.GetUserId()
 	userRole := req.GetUserRole()
 	name := req.GetName()
-	desc := req.GetDesciption()
+	desc := req.GetDescription()
 	price := req.GetPrice()
 
 	id := uuid.NewString()
@@ -64,7 +64,7 @@ func (c *coursesservice) NewCourse(ctx context.Context, req *pb.NewCourseReq) (*
 	return &pb.NewCourseRes{CourseId: id}, nil
 }
 
-func (c *coursesservice) GetCourses(ctx context.Context, req *pb.GetCoursesReq) (*pb.GetCoursesRes, error) {
+func (c *coursesservice) GetCourse(ctx context.Context, req *pb.GetCourseReq) (*pb.GetCourseRes, error) {
 	const op = "courses.GetCourses"
 
 	coursesID := req.GetCourseId()
@@ -75,7 +75,7 @@ func (c *coursesservice) GetCourses(ctx context.Context, req *pb.GetCoursesReq) 
 		return nil, fmt.Errorf("%s: get courses: %w", op, err)
 	}
 
-	return &pb.GetCoursesRes{
+	return &pb.GetCourseRes{
 		CourseId:   coursesID,
 		Name:       courseInfo.Name,
 		Desciption: courseInfo.Desc,

@@ -6,18 +6,18 @@ Data:`
 		"user_id": "12345",
 		"user_role": "admin",
 		"name": "some_name",
-		"desciption": "cool desc",
+		"description": "cool desc",
 		"price": "1347"
 	}
 `
 ProtoPath:../protos/courses.proto
 Type:grpc
-Response:{"courseId":"bf866304-d17c-4792-90f0-f36e229f4045"}
+Response:{"courseId":"7e0dcd0d-f1ff-423c-82ed-3a676a27d7ec"}
 [\new_course]
 
 [get_course]
 Target:localhost:50052
-Endpoint:courses.CoursesService/GetCourses
+Endpoint:courses.CoursesService/GetCourse
 Data:`
 	{
 		"course_id": "{RESPONSE id=0 json:courseId}"
@@ -25,6 +25,6 @@ Data:`
 `
 ProtoPath:../protos/courses.proto
 Type:grpc
-Response:{"courseId":"bf866304-d17c-4792-90f0-f36e229f4045","name":"some_name","desciption":"cool desc","price":"1347"}
+Response:{"courseId":"7e0dcd0d-f1ff-423c-82ed-3a676a27d7ec","name":"some_name","desciption":"cool desc","price":"1347"}
 [\get_course]
 
