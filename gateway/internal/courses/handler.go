@@ -44,11 +44,11 @@ func (cs *CoursesService) NewCourse(c *gin.Context) {
 
 	res, err := services.Execute(cs.cb, func() (*pb.NewCourseRes, error) {
 		return cs.client.NewCourse(c.Request.Context(), &pb.NewCourseReq{
-			UserId:     req.UserID,
-			UserRole:   req.UserRole,
-			Name:       req.Name,
-			Desciption: req.Desc,
-			Price:      req.Price,
+			UserId:      req.UserID,
+			UserRole:    req.UserRole,
+			Name:        req.Name,
+			Description: req.Desc,
+			Price:       req.Price,
 		})
 	})
 	if err != nil {
@@ -58,4 +58,37 @@ func (cs *CoursesService) NewCourse(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"course_id": res.CourseId})
+}
+
+func (cs *CoursesService) GetCourse(c *gin.Context) {
+	const op = "courses.GetCourse"
+
+	req := struct {
+		CourseID string `validate:"required,uuid"`
+	}{}
+	req.CourseID = c.Param("course_id")
+
+	if err := cs.val.Struct(req); err != nil {
+		c.JSON(http.StatusBadRequest,
+			gin.H{"error": "validation failed: " + err.Error()})
+		return
+	}
+
+	res, err := services.Execute(cs.cb, func() (*pb.GetCourseRes, error) {
+		return cs.client.GetCourse(c.Request.Context(), &pb.GetCourseReq{
+			CourseId: req.CourseID,
+		})
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError,
+			gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"course_id":   res.CourseId,
+		"name":        res.Name,
+		"description": res.Desciption,
+		"price":       res.Price,
+	})
 }

@@ -73,6 +73,7 @@ func (cs *CoursesService) RegisterRoutes(r *gin.RouterGroup) {
 	r.Use(middlewares.JWTMiddleware(cs.Validate))
 
 	r.POST("/new", cs.NewCourse)
+	r.GET("/get/:course_id", cs.GetCourse)
 }
 
 func (cs *CoursesService) IncrCounter(name string) {

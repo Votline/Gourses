@@ -11,10 +11,10 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY0YWUyZDI4LWE2ZTgtNGZkYy05YTk5LTg3NGY2YmJjNTU4MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjQ2NjUyMn0.ZCWdlPGAnnFy6ddD37bI5r27CnVkplYnT8k7ugP5Nqc","user_id":"f4ae2d28-a6e8-4fdc-9a99-874f6bbc5582"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZiNjY0NTBlLWY3MmUtNDBmZi04ZTQ5LWUxNDcxMGNjNjg3ZSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjcwMzM0OH0.ULPcN5hxwtGjYfgEbGy9wZ3ewadiE6y5uhD0LCVb-mU","user_id":"6b66450e-f72e-40ff-8e49-e14710cc687e"}
 CookieOut:`
 [localhost:8080]
- session_key:ac178138-4ca6-4e1a-a1ab-8ee62930f55a
+ session_key:083c1db4-6275-4971-8d87-a21e216ea0d3
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -35,10 +35,10 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY0YWUyZDI4LWE2ZTgtNGZkYy05YTk5LTg3NGY2YmJjNTU4MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjQ2NjUyMn0.ZCWdlPGAnnFy6ddD37bI5r27CnVkplYnT8k7ugP5Nqc","user_id":"f4ae2d28-a6e8-4fdc-9a99-874f6bbc5582"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZiNjY0NTBlLWY3MmUtNDBmZi04ZTQ5LWUxNDcxMGNjNjg3ZSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjcwMzM0OH0.ULPcN5hxwtGjYfgEbGy9wZ3ewadiE6y5uhD0LCVb-mU","user_id":"6b66450e-f72e-40ff-8e49-e14710cc687e"}
 CookieOut:`
 [localhost:8080]
- session_key:d9d1b743-175d-4836-bff9-33957fee44de
+ session_key:dd4afcfb-763f-45df-8bc6-9f17b7940bed
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -58,8 +58,19 @@ Headers:`
 	Authorization: Bearer {RESPONSE id=1 json:token}
 `
 Type:http
-Response:{"course_id":"e66b53f4-87eb-41f1-a701-fafb59a1741f"}
+Response:{"course_id":"9cf360e5-4a75-4967-8331-9921066f8796"}
 [\new_course]
+
+[get_course]
+URL:http://localhost:8080/api/courses/get/{RESPONSE id=2 json:course_id}
+Method:GET
+Headers:`
+	Content-Type: application/json
+	Authorization: Bearer {RESPONSE id=1 json:token}
+`
+Type:http
+Response:{"course_id":"9cf360e5-4a75-4967-8331-9921066f8796","description":"some more","name":"some","price":"12345"}
+[\get_course]
 
 [del]
 URL:http://localhost:8080/api/users/del/{RESPONSE id=1 json:user_id}
