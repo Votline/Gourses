@@ -82,3 +82,18 @@ func (c *coursesservice) GetCourse(ctx context.Context, req *pb.GetCourseReq) (*
 		Price:      courseInfo.Price,
 	}, nil
 }
+
+func (c *coursesservice) DeleteCourse(ctx context.Context, req *pb.DeleteCourseReq) (*pb.DeleteCourseRes, error) {
+	const op = "courses.DeleteCourse"
+
+	courseID := req.GetCourseId()
+	userID := req.GetUserId()
+	userRole := req.GetUserRole()
+
+	if err := c.db.DeleteCourse(courseID, userID, userRole); err != nil {
+		c.log.Error(op, zap.Error(err))
+		return nil, fmt.Errorf("%s: delete course: %w", op, err)
+	}
+
+	return &pb.DeleteCourseRes{}, nil
+}

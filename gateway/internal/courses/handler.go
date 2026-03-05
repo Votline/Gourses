@@ -92,3 +92,33 @@ func (cs *CoursesService) GetCourse(c *gin.Context) {
 		"price":       res.Price,
 	})
 }
+
+func (cs *CoursesService) DeleteCourse(c *gin.Context) {
+	const op = "courses.DeleteCourse"
+
+	req := struct {
+		CourseID string `validate:"required,uuid"`
+		UserID   string `validate:"required,uuid"`
+	}{}
+	req.CourseID = c.Param("course_id")
+	req.UserID = c.GetString("user_id")
+
+	if err := cs.val.Struct(req); err != nil {
+		c.JSON(http.StatusBadRequest,
+			gin.H{"error": "validation failed: " + err.Error()})
+		return
+	}
+
+	if _, err := services.Execute(cs.cb, func() (*pb.DeleteCourseRes, error) {
+		return cs.client.DeleteCourse(c.Request.Context(), &pb.DeleteCourseReq{
+			CourseId: req.CourseID,
+			UserId:   req.UserID,
+		})
+	}); err != nil {
+		c.JSON(http.StatusInternalServerError,
+			gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Status(http.StatusOK)
+}

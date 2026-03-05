@@ -91,3 +91,30 @@ func (d *DB) GetCourse(id string) (*CourseInfo, error) {
 
 	return &courseInfo, nil
 }
+
+func (d *DB) DeleteCourse(id, userID, userRole string) error {
+	const op = "db.DeleteCourse"
+
+	q := d.bd.Delete("courses").Where(sq.Eq{"id": id})
+
+	if userRole != "admin" {
+		q = q.Where(sq.Eq{"user_id": userID})
+	}
+
+	query, args, err := q.ToSql()
+	if err != nil {
+		return fmt.Errorf("%s: delete query: %w", op, err)
+	}
+
+	res, err := d.db.Exec(query, args...)
+	if err != nil {
+		return fmt.Errorf("%s: delete course: %w", op, err)
+	}
+	if n, err := res.RowsAffected(); err != nil {
+		return fmt.Errorf("%s: delete course: %w", op, err)
+	} else if n == 0 {
+		return fmt.Errorf("%s: no course found", op)
+	}
+
+	return nil
+}

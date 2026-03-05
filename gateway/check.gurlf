@@ -11,10 +11,10 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZiNjY0NTBlLWY3MmUtNDBmZi04ZTQ5LWUxNDcxMGNjNjg3ZSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjcwMzM0OH0.ULPcN5hxwtGjYfgEbGy9wZ3ewadiE6y5uhD0LCVb-mU","user_id":"6b66450e-f72e-40ff-8e49-e14710cc687e"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJmYzczNGQ5LThkNWYtNDI0ZS05Y2QyLWFlODFlMmIzZTUwNiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjcwNDg5MX0.bvOFDmCO7kzk3t-oNM5wLNKdaAkEVMc77OMvkaLDEHs","user_id":"2fc734d9-8d5f-424e-9cd2-ae81e2b3e506"}
 CookieOut:`
 [localhost:8080]
- session_key:083c1db4-6275-4971-8d87-a21e216ea0d3
+ session_key:385f0808-d2af-4291-bf1d-6b1fd48b5a82
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -35,10 +35,10 @@ Body:`
 `
 Headers:Content-Type: application/json
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZiNjY0NTBlLWY3MmUtNDBmZi04ZTQ5LWUxNDcxMGNjNjg3ZSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjcwMzM0OH0.ULPcN5hxwtGjYfgEbGy9wZ3ewadiE6y5uhD0LCVb-mU","user_id":"6b66450e-f72e-40ff-8e49-e14710cc687e"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJmYzczNGQ5LThkNWYtNDI0ZS05Y2QyLWFlODFlMmIzZTUwNiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjcwNDg5MX0.bvOFDmCO7kzk3t-oNM5wLNKdaAkEVMc77OMvkaLDEHs","user_id":"2fc734d9-8d5f-424e-9cd2-ae81e2b3e506"}
 CookieOut:`
 [localhost:8080]
- session_key:dd4afcfb-763f-45df-8bc6-9f17b7940bed
+ session_key:6e472672-f067-4cdc-addc-6a149ccf3b0f
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -58,7 +58,7 @@ Headers:`
 	Authorization: Bearer {RESPONSE id=1 json:token}
 `
 Type:http
-Response:{"course_id":"9cf360e5-4a75-4967-8331-9921066f8796"}
+Response:{"course_id":"997fbef6-4d96-4dd2-979e-ada39c98ffa8"}
 [\new_course]
 
 [get_course]
@@ -69,8 +69,19 @@ Headers:`
 	Authorization: Bearer {RESPONSE id=1 json:token}
 `
 Type:http
-Response:{"course_id":"9cf360e5-4a75-4967-8331-9921066f8796","description":"some more","name":"some","price":"12345"}
+Response:{"course_id":"997fbef6-4d96-4dd2-979e-ada39c98ffa8","description":"some more","name":"some","price":"12345"}
 [\get_course]
+
+[del_course]
+URL:http://localhost:8080/api/courses/delete/{RESPONSE id=3 json:course_id}
+Method:DELETE
+Headers:`
+	Content-Type: application/json
+	Authorization: Bearer {RESPONSE id=1 json:token}
+`
+Type:http
+Response:
+[\del_course]
 
 [del]
 URL:http://localhost:8080/api/users/del/{RESPONSE id=1 json:user_id}

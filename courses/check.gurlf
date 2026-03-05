@@ -12,7 +12,7 @@ Data:`
 `
 ProtoPath:../protos/courses.proto
 Type:grpc
-Response:{"courseId":"7e0dcd0d-f1ff-423c-82ed-3a676a27d7ec"}
+Response:{"courseId":"5f310d4b-0a9e-4352-828f-dd44333b7bc2"}
 [\new_course]
 
 [get_course]
@@ -25,6 +25,20 @@ Data:`
 `
 ProtoPath:../protos/courses.proto
 Type:grpc
-Response:{"courseId":"7e0dcd0d-f1ff-423c-82ed-3a676a27d7ec","name":"some_name","desciption":"cool desc","price":"1347"}
+Response:{"courseId":"5f310d4b-0a9e-4352-828f-dd44333b7bc2","name":"some_name","desciption":"cool desc","price":"1347"}
 [\get_course]
+
+[del_course]
+Target:localhost:50052
+Endpoint:courses.CoursesService/DeleteCourse
+Data:`
+	{
+		"course_id": "{RESPONSE id=0 json:courseId}",
+		"user_id": "12345"
+	}
+`
+ProtoPath:../protos/courses.proto
+Type:grpc
+Response:{}
+[\del_course]
 

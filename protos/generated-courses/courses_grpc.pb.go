@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	CoursesService_NewCourse_FullMethodName    = "/courses.CoursesService/NewCourse"
 	CoursesService_GetCourse_FullMethodName    = "/courses.CoursesService/GetCourse"
+	CoursesService_UpdateCourse_FullMethodName = "/courses.CoursesService/UpdateCourse"
 	CoursesService_DeleteCourse_FullMethodName = "/courses.CoursesService/DeleteCourse"
 )
 
@@ -30,6 +31,7 @@ const (
 type CoursesServiceClient interface {
 	NewCourse(ctx context.Context, in *NewCourseReq, opts ...grpc.CallOption) (*NewCourseRes, error)
 	GetCourse(ctx context.Context, in *GetCourseReq, opts ...grpc.CallOption) (*GetCourseRes, error)
+	UpdateCourse(ctx context.Context, in *UpdateCourseReq, opts ...grpc.CallOption) (*UpdateCourseRes, error)
 	DeleteCourse(ctx context.Context, in *DeleteCourseReq, opts ...grpc.CallOption) (*DeleteCourseRes, error)
 }
 
@@ -61,6 +63,16 @@ func (c *coursesServiceClient) GetCourse(ctx context.Context, in *GetCourseReq, 
 	return out, nil
 }
 
+func (c *coursesServiceClient) UpdateCourse(ctx context.Context, in *UpdateCourseReq, opts ...grpc.CallOption) (*UpdateCourseRes, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateCourseRes)
+	err := c.cc.Invoke(ctx, CoursesService_UpdateCourse_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *coursesServiceClient) DeleteCourse(ctx context.Context, in *DeleteCourseReq, opts ...grpc.CallOption) (*DeleteCourseRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteCourseRes)
@@ -77,6 +89,7 @@ func (c *coursesServiceClient) DeleteCourse(ctx context.Context, in *DeleteCours
 type CoursesServiceServer interface {
 	NewCourse(context.Context, *NewCourseReq) (*NewCourseRes, error)
 	GetCourse(context.Context, *GetCourseReq) (*GetCourseRes, error)
+	UpdateCourse(context.Context, *UpdateCourseReq) (*UpdateCourseRes, error)
 	DeleteCourse(context.Context, *DeleteCourseReq) (*DeleteCourseRes, error)
 	mustEmbedUnimplementedCoursesServiceServer()
 }
@@ -93,6 +106,9 @@ func (UnimplementedCoursesServiceServer) NewCourse(context.Context, *NewCourseRe
 }
 func (UnimplementedCoursesServiceServer) GetCourse(context.Context, *GetCourseReq) (*GetCourseRes, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetCourse not implemented")
+}
+func (UnimplementedCoursesServiceServer) UpdateCourse(context.Context, *UpdateCourseReq) (*UpdateCourseRes, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateCourse not implemented")
 }
 func (UnimplementedCoursesServiceServer) DeleteCourse(context.Context, *DeleteCourseReq) (*DeleteCourseRes, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteCourse not implemented")
@@ -154,6 +170,24 @@ func _CoursesService_GetCourse_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CoursesService_UpdateCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCourseReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).UpdateCourse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_UpdateCourse_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).UpdateCourse(ctx, req.(*UpdateCourseReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CoursesService_DeleteCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteCourseReq)
 	if err := dec(in); err != nil {
@@ -186,6 +220,10 @@ var CoursesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCourse",
 			Handler:    _CoursesService_GetCourse_Handler,
+		},
+		{
+			MethodName: "UpdateCourse",
+			Handler:    _CoursesService_UpdateCourse_Handler,
 		},
 		{
 			MethodName: "DeleteCourse",

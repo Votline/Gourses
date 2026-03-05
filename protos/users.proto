@@ -26,6 +26,19 @@ message LogRes {
   string user_id = 3;
 }
 
+message UpdateReq {
+  string user_id = 1;
+  string user_role = 2;
+  string session_key = 3;
+  string new_name = 4;
+  string new_email = 5;
+  string new_password = 6;
+}
+message UpdateRes {
+  string token = 1;
+  string session_key = 2;
+}
+
 message DelReq {
   string session_key = 1;
   string del_user_id = 2;
@@ -45,6 +58,7 @@ message ValidateRes {
 service UsersService {
   rpc RegUser (RegReq) returns (RegRes);
   rpc LogUser (LogReq) returns (LogRes);
+  rpc UpdateUser (UpdateReq) returns (UpdateRes);
   rpc DelUser (DelReq) returns (DelRes);
   rpc ValidateUser (ValidateReq) returns (ValidateRes);
 }

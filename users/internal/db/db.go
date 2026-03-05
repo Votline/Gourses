@@ -119,8 +119,15 @@ func (d *DB) DelUser(id, role, delUserID string) error {
 		return fmt.Errorf("%s: create query: %w", op, err)
 	}
 
-	if _, err := tx.Exec(query, args...); err != nil {
+	res, err := tx.Exec(query, args...)
+	if err != nil {
 		return fmt.Errorf("%s: delete user: %w", op, err)
+	}
+
+	if n, err := res.RowsAffected(); err != nil {
+		return fmt.Errorf("%s: delete user: %w", op, err)
+	} else if n == 0 {
+		return fmt.Errorf("%s: delete user: no rows affected", op)
 	}
 
 	if err := tx.Commit(); err != nil {

@@ -24,6 +24,16 @@ message GetCourseRes {
   string price = 4;
 }
 
+message UpdateCourseReq {
+  string user_id = 1;
+  string user_role = 2;
+  string course_id = 3;
+  string new_name = 4;
+  string new_description = 5;
+  string new_price = 6;
+}
+message UpdateCourseRes {}
+
 message DeleteCourseReq {
   string course_id = 1;
   string user_id = 2;
@@ -34,5 +44,6 @@ message DeleteCourseRes {}
 service CoursesService {
   rpc NewCourse (NewCourseReq) returns (NewCourseRes);
   rpc GetCourse (GetCourseReq) returns (GetCourseRes);
+  rpc UpdateCourse (UpdateCourseReq) returns (UpdateCourseRes);
   rpc DeleteCourse (DeleteCourseReq) returns (DeleteCourseRes);
 }
