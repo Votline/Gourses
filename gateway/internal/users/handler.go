@@ -16,7 +16,7 @@ func (us *UsersService) Register(c *gin.Context) {
 	req := struct {
 		Name     string `json:"name"     validate:"required"`
 		Email    string `json:"email"    validate:"required,email"`
-		Role     string `json:"role"     validate:"oneof=admin user guest dev"`
+		Role     string `json:"role"     validate:"oneof=admin teacher user guest dev"`
 		Password string `json:"password" validate:"required,min=8"`
 	}{}
 
@@ -97,7 +97,7 @@ func (us *UsersService) DeleteUser(c *gin.Context) {
 		DelUserID  string `validate:"required,uuid"`
 		SessionKey string `validate:"required,uuid"`
 		UserID     string `validate:"required,uuid"`
-		UserRole   string `validate:"required,oneof=admin user guest dev"`
+		UserRole   string `validate:"required,oneof=admin teacher user guest dev"`
 	}{}
 
 	req.DelUserID = c.Param("del_user_id")

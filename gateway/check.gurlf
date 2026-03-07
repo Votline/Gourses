@@ -10,11 +10,12 @@ Body:`
 	}
 `
 Headers:Content-Type: application/json
+ID:0
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJmYzczNGQ5LThkNWYtNDI0ZS05Y2QyLWFlODFlMmIzZTUwNiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjcwNDg5MX0.bvOFDmCO7kzk3t-oNM5wLNKdaAkEVMc77OMvkaLDEHs","user_id":"2fc734d9-8d5f-424e-9cd2-ae81e2b3e506"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxMDUzYzZjLThiZjYtNGIzMC1hNzk2LTMwMmY3MTIwYWRmMCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjkwNjIzN30.GHp4shr4Wnz8vv4uyIziJVxsFXVO7PmWOm02vGdnJMo","user_id":"01053c6c-8bf6-4b30-a796-302f7120adf0"}
 CookieOut:`
 [localhost:8080]
- session_key:385f0808-d2af-4291-bf1d-6b1fd48b5a82
+ session_key:373c73af-bfb2-4c93-9e65-fb8eca703099
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -34,11 +35,12 @@ Body:`
 	}
 `
 Headers:Content-Type: application/json
+ID:1
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJmYzczNGQ5LThkNWYtNDI0ZS05Y2QyLWFlODFlMmIzZTUwNiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjcwNDg5MX0.bvOFDmCO7kzk3t-oNM5wLNKdaAkEVMc77OMvkaLDEHs","user_id":"2fc734d9-8d5f-424e-9cd2-ae81e2b3e506"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxMDUzYzZjLThiZjYtNGIzMC1hNzk2LTMwMmY3MTIwYWRmMCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjkwNjIzN30.GHp4shr4Wnz8vv4uyIziJVxsFXVO7PmWOm02vGdnJMo","user_id":"01053c6c-8bf6-4b30-a796-302f7120adf0"}
 CookieOut:`
 [localhost:8080]
- session_key:6e472672-f067-4cdc-addc-6a149ccf3b0f
+ session_key:1043ad29-2508-41d0-94cc-bb97ce111255
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -51,14 +53,15 @@ CookieOut:`
 URL:http://localhost:8080/api/courses/new
 Method:POST
 Body:`
-	{"name": "some", "desc": "some more", "price": "12345"}
+	{"name": "some", "description": "some more", "price": "12345"}
 `
 Headers:`
 	Content-Type: application/json
 	Authorization: Bearer {RESPONSE id=1 json:token}
 `
+ID:2
 Type:http
-Response:{"course_id":"997fbef6-4d96-4dd2-979e-ada39c98ffa8"}
+Response:{"course_id":"561f7b52-6615-41ed-98cf-330ed4ad6bea"}
 [\new_course]
 
 [get_course]
@@ -68,9 +71,36 @@ Headers:`
 	Content-Type: application/json
 	Authorization: Bearer {RESPONSE id=1 json:token}
 `
+ID:3
 Type:http
-Response:{"course_id":"997fbef6-4d96-4dd2-979e-ada39c98ffa8","description":"some more","name":"some","price":"12345"}
+Response:{"course_id":"561f7b52-6615-41ed-98cf-330ed4ad6bea","description":"some more","name":"some","price":"12345"}
 [\get_course]
+
+[upd_course]
+URL:http://localhost:8080/api/courses/update/{RESPONSE id=2 json:course_id}
+Method:PUT
+Body:`
+	{
+		"new_name": "upd name",
+		"new_description": "upd desc",
+		"new_price": "147"
+	}
+`
+Headers:`
+	Content-Type: application/json
+	Authorization: Bearer {RESPONSE id=1 json:token}
+`
+ID:4
+Type:http
+Response:
+[\upd_course]
+
+[get_upd_course]
+TargetID:3
+ID:5
+Type:repeat
+Response:{"course_id":"561f7b52-6615-41ed-98cf-330ed4ad6bea","description":"upd desc","name":"upd name","price":"147"}
+[\get_upd_course]
 
 [del_course]
 URL:http://localhost:8080/api/courses/delete/{RESPONSE id=3 json:course_id}
@@ -79,6 +109,7 @@ Headers:`
 	Content-Type: application/json
 	Authorization: Bearer {RESPONSE id=1 json:token}
 `
+ID:6
 Type:http
 Response:
 [\del_course]
@@ -90,6 +121,7 @@ Headers:`
 	Content-Type: application/json
 	Authorization: Bearer {RESPONSE id=1 json:token}
 `
+ID:7
 Type:http
 Response:
 [\del]

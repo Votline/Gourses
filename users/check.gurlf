@@ -10,8 +10,9 @@ Data:`
 	}
 `
 ProtoPath:../protos/users.proto
+ID:0
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhODdjM2I4LTMzNWEtNDQzZi05OWY1LTFkZGJhMmZkMTRkYSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcyMTgyODQzfQ.RwVcxV-6TcLC9ty3ami6NrzGUVn3pP6Qv-nmMOMqxSw","sessionKey":"36e41970-f84b-4d7e-9f85-370e70ae27c7","userId":"1a87c3b8-335a-443f-99f5-1ddba2fd14da"}
+Response:rpc error: code = Unknown desc = usersserver.RegUser: add to db: UsersPostgresDB.RegUser: insert user: pq: duplicate key value violates unique constraint "users_user_name_key" (23505)
 [\reg]
 
 [log]
@@ -25,8 +26,9 @@ Data:`
 	}
 `
 ProtoPath:../protos/users.proto
+ID:1
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhODdjM2I4LTMzNWEtNDQzZi05OWY1LTFkZGJhMmZkMTRkYSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcyMTgyODQ0fQ.H-IokxLQfTV_ZGwXHYT2zdlxL4AJQUe3_riAXq06xIw","sessionKey":"6891df75-c797-4167-9e47-9be30e589032","userId":"1a87c3b8-335a-443f-99f5-1ddba2fd14da"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyYTliYmJkLTE5N2QtNDM0Ny1iNTliLWJkNjU2ZWNkZDQ2YiIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcyODI0NDk1fQ.92HPc-S4mzbEEYyBAs2OVoHjl7F6uEomSlpdKlDUtEY","sessionKey":"ba206612-6a16-4247-ad2b-0fcc5f99e7f6","userId":"12a9bbbd-197d-4347-b59b-bd656ecdd46b"}
 [\log]
 
 [del]
@@ -34,13 +36,15 @@ Target:localhost:50051
 Endpoint:users.UsersService/DelUser
 Data:`
 	{
-		"token":"{RESPONSE id=1 json:token}",
 		"session_key":"{RESPONSE id=1 json:sessionKey}",
-		"del_user_id":"{RESPONSE id=1 json:userId}"
+		"del_user_id":"{RESPONSE id=1 json:userId}",
+		"user_id": "{RESPONSE id=1 json:userId}",
+		"user_role": "admin"
 	}
 `
 ProtoPath:../protos/users.proto
+ID:2
 Type:grpc
-Response:{}
+Response:rpc error: code = Unknown desc = usersserver.DelUser: validate session: UsersRedisDB.Validate: invalid session
 [\del]
 

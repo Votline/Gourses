@@ -83,6 +83,24 @@ func (c *coursesservice) GetCourse(ctx context.Context, req *pb.GetCourseReq) (*
 	}, nil
 }
 
+func (c *coursesservice) UpdateCourse(ctx context.Context, req *pb.UpdateCourseReq) (*pb.UpdateCourseRes, error) {
+	const op = "courses.UpdateCourse"
+
+	userID := req.GetUserId()
+	userRole := req.GetUserRole()
+	courseID := req.GetCourseId()
+	name := req.GetNewName()
+	desc := req.GetNewDescription()
+	price := req.GetNewPrice()
+
+	if err := c.db.UpdateCourse(userID, userRole, courseID, name, desc, price); err != nil {
+		c.log.Error(op, zap.Error(err))
+		return nil, fmt.Errorf("%s: update course: %w", op, err)
+	}
+
+	return &pb.UpdateCourseRes{}, nil
+}
+
 func (c *coursesservice) DeleteCourse(ctx context.Context, req *pb.DeleteCourseReq) (*pb.DeleteCourseRes, error) {
 	const op = "courses.DeleteCourse"
 

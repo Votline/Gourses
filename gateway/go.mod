@@ -3,7 +3,7 @@ module gateway
 go 1.25.6
 
 require (
-	github.com/Votline/Gourses/protos v0.0.6
+	github.com/Votline/Gourses/protos v0.0.7
 	github.com/gin-gonic/gin v1.11.0
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/prometheus/client_golang v1.19.1

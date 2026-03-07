@@ -75,6 +75,7 @@ func (cs *CoursesService) RegisterRoutes(r *gin.RouterGroup) {
 	r.POST("/new", cs.NewCourse)
 	r.GET("/get/:course_id", cs.GetCourse)
 	r.DELETE("/delete/:course_id", cs.DeleteCourse)
+	r.PUT("/update/:course_id", cs.UpdateCourse)
 }
 
 func (cs *CoursesService) IncrCounter(name string) {

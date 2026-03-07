@@ -11,8 +11,9 @@ Data:`
 	}
 `
 ProtoPath:../protos/courses.proto
+ID:0
 Type:grpc
-Response:{"courseId":"5f310d4b-0a9e-4352-828f-dd44333b7bc2"}
+Response:{"courseId":"7322c7f1-af9f-43c1-b12f-54ba3d611a24"}
 [\new_course]
 
 [get_course]
@@ -24,9 +25,36 @@ Data:`
 	}
 `
 ProtoPath:../protos/courses.proto
+ID:1
 Type:grpc
-Response:{"courseId":"5f310d4b-0a9e-4352-828f-dd44333b7bc2","name":"some_name","desciption":"cool desc","price":"1347"}
+Response:{"courseId":"7322c7f1-af9f-43c1-b12f-54ba3d611a24","name":"some_name","desciption":"cool desc","price":"1347"}
 [\get_course]
+
+[update_course]
+Target:localhost:50052
+Endpoint:courses.CoursesService/UpdateCourse
+Data:`
+	{
+		"user_id": "12345",
+		"user_role": "admin",
+		"course_id": "{RESPONSE id=1 json:courseId}",
+		"new_name": "the new name",
+		"new_description": "the new cool desc",
+		"new_price": "13557"
+	}
+`
+ProtoPath:../protos/courses.proto
+ID:2
+Type:grpc
+Response:{}
+[\update_course]
+
+[get_update_course]
+TargetID:1
+ID:3
+Type:repeat
+Response:{"courseId":"7322c7f1-af9f-43c1-b12f-54ba3d611a24","name":"the new name","desciption":"the new cool desc","price":"13557"}
+[\get_update_course]
 
 [del_course]
 Target:localhost:50052
@@ -38,6 +66,7 @@ Data:`
 	}
 `
 ProtoPath:../protos/courses.proto
+ID:4
 Type:grpc
 Response:{}
 [\del_course]
