@@ -4,7 +4,7 @@ go 1.25.6
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/Votline/Gourses/protos v0.0.4
+	github.com/Votline/Gourses/protos v0.0.9
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/uuid v1.6.0

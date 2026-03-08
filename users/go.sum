@@ -6,6 +6,12 @@ github.com/Votline/Gourses/protos v0.0.3 h1:BYoSPk51xQSGWbSh3zQM6WPSbVyGpFoS0qMH
 github.com/Votline/Gourses/protos v0.0.3/go.mod h1:HuR89qF7fbTL/O9B4fLt0kl6QqBXkkeXU3DFfawe+9c=
 github.com/Votline/Gourses/protos v0.0.4 h1:0eMLxZDUfcatOls5ARtcXoc78+cREZq/3nxapiJKXFc=
 github.com/Votline/Gourses/protos v0.0.4/go.mod h1:HuR89qF7fbTL/O9B4fLt0kl6QqBXkkeXU3DFfawe+9c=
+github.com/Votline/Gourses/protos v0.0.7 h1:d3GSzood6FL604s/zv5iwDrZrJFnOyFZPRugr1lZxSY=
+github.com/Votline/Gourses/protos v0.0.7/go.mod h1:HuR89qF7fbTL/O9B4fLt0kl6QqBXkkeXU3DFfawe+9c=
+github.com/Votline/Gourses/protos v0.0.8 h1:INaLqlhnDppETpOXdJumzaC/Wb+CwgD5ADIjnS7g6ho=
+github.com/Votline/Gourses/protos v0.0.8/go.mod h1:HuR89qF7fbTL/O9B4fLt0kl6QqBXkkeXU3DFfawe+9c=
+github.com/Votline/Gourses/protos v0.0.9 h1:CivZJl2ML1M4bkqvSsdRbvbS7CNl2ymrRJU1Z9bivIQ=
+github.com/Votline/Gourses/protos v0.0.9/go.mod h1:HuR89qF7fbTL/O9B4fLt0kl6QqBXkkeXU3DFfawe+9c=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

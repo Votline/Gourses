@@ -89,6 +89,32 @@ func (d *DB) LogUser(username string) (security.UserInfo, error) {
 	return ui, nil
 }
 
+func (d *DB) UpdateUser(id, username, role, pswd string) error {
+	const op = "UsersPostgresDB.UpdateUser"
+
+	query, args, err := d.bd.Update("users").
+		Set("user_name", username).
+		Set("role", role).
+		Set("password", pswd).
+		Where(sq.Eq{"id": id}).
+		ToSql()
+	if err != nil {
+		return fmt.Errorf("%s: create query: %w", op, err)
+	}
+
+	res, err := d.db.Exec(query, args...)
+	if err != nil {
+		return fmt.Errorf("%s: update user: %w", op, err)
+	}
+	if n, err := res.RowsAffected(); err != nil {
+		return fmt.Errorf("%s: get affected rows: %w", op, err)
+	} else if n == 0 {
+		return fmt.Errorf("%s: no rows affected", op)
+	}
+
+	return nil
+}
+
 func (d *DB) DelUser(id, role, delUserID string) error {
 	const op = "UsersPostgresDB.DelUser"
 

@@ -12,10 +12,10 @@ Body:`
 Headers:Content-Type: application/json
 ID:0
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxMDUzYzZjLThiZjYtNGIzMC1hNzk2LTMwMmY3MTIwYWRmMCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjkwNjIzN30.GHp4shr4Wnz8vv4uyIziJVxsFXVO7PmWOm02vGdnJMo","user_id":"01053c6c-8bf6-4b30-a796-302f7120adf0"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1MDE4YmU1LWNjYTItNDdjYi04MGQ0LTg1ZjQxMjlmODE4MCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3Mjk2Njk3MX0.P3nuSOnYo0Ja4DKhoaYV3keCFXVXjieG6UgWnijsFIg","user_id":"45018be5-cca2-47cb-80d4-85f4129f8180"}
 CookieOut:`
 [localhost:8080]
- session_key:373c73af-bfb2-4c93-9e65-fb8eca703099
+ session_key:0c6c2f12-efb1-4f9f-aef3-08a8771b6207
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -37,10 +37,10 @@ Body:`
 Headers:Content-Type: application/json
 ID:1
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxMDUzYzZjLThiZjYtNGIzMC1hNzk2LTMwMmY3MTIwYWRmMCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MjkwNjIzN30.GHp4shr4Wnz8vv4uyIziJVxsFXVO7PmWOm02vGdnJMo","user_id":"01053c6c-8bf6-4b30-a796-302f7120adf0"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1MDE4YmU1LWNjYTItNDdjYi04MGQ0LTg1ZjQxMjlmODE4MCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3Mjk2Njk3MX0.P3nuSOnYo0Ja4DKhoaYV3keCFXVXjieG6UgWnijsFIg","user_id":"45018be5-cca2-47cb-80d4-85f4129f8180"}
 CookieOut:`
 [localhost:8080]
- session_key:1043ad29-2508-41d0-94cc-bb97ce111255
+ session_key:51111120-4dd1-4a7b-bc2f-5d3e23305472
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -61,7 +61,7 @@ Headers:`
 `
 ID:2
 Type:http
-Response:{"course_id":"561f7b52-6615-41ed-98cf-330ed4ad6bea"}
+Response:{"course_id":"d4c60d19-688c-4cf9-8b9b-5bc217763cfa"}
 [\new_course]
 
 [get_course]
@@ -73,7 +73,7 @@ Headers:`
 `
 ID:3
 Type:http
-Response:{"course_id":"561f7b52-6615-41ed-98cf-330ed4ad6bea","description":"some more","name":"some","price":"12345"}
+Response:{"course_id":"d4c60d19-688c-4cf9-8b9b-5bc217763cfa","description":"some more","name":"some","price":"12345"}
 [\get_course]
 
 [upd_course]
@@ -99,7 +99,7 @@ Response:
 TargetID:3
 ID:5
 Type:repeat
-Response:{"course_id":"561f7b52-6615-41ed-98cf-330ed4ad6bea","description":"upd desc","name":"upd name","price":"147"}
+Response:{"course_id":"d4c60d19-688c-4cf9-8b9b-5bc217763cfa","description":"upd desc","name":"upd name","price":"147"}
 [\get_upd_course]
 
 [del_course]
@@ -114,14 +114,51 @@ Type:http
 Response:
 [\del_course]
 
-[del]
-URL:http://localhost:8080/api/users/del/{RESPONSE id=1 json:user_id}
-Method:DELETE
+[upd_user]
+URL:http://localhost:8080/api/users/update
+Method:PUT
+Body:`
+	{
+		"new_name": "a62893bc-70af-4fb3-aca6-b663ad35404f",
+		"new_email": "upd@mail.com",
+		"new_role": "admin",
+		"new_password": "updatepaswd"
+	}
+`
 Headers:`
 	Content-Type: application/json
 	Authorization: Bearer {RESPONSE id=1 json:token}
 `
 ID:7
+Type:http
+Response:{"error":"rpc error: code = Unknown desc = usersserver.UpdateUser: update user: UsersPostgresDB.UpdateUser: update user: pq: duplicate key value violates unique constraint \"users_user_name_key\" (23505)"}
+[\upd_user]
+
+[log_upd_user]
+TargetID:1
+Replace:`
+[rep]
+Body:`
+	{
+		"name": "a62893bc-70af-4fb3-aca6-b663ad35404f",
+		"email": "upd@mail.com",
+		"password": "updatepaswd"
+	}`
+[\rep]
+`
+ID:8
+Type:repeat
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcyODk5NGVjLTVjODMtNDM1Mi1iMTAwLTRmOTQ5NWM1MWZhOCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3Mjk2Njk3MX0.p7K4S0WKGYyNfLrmXhIx038ZYQaM-zL9QIVxSPUKa_I","user_id":"728994ec-5c83-4352-b100-4f9495c51fa8"}
+[\log_upd_user]
+
+[del]
+URL:http://localhost:8080/api/users/del/{RESPONSE id=8 json:user_id}
+Method:DELETE
+Headers:`
+	Content-Type: application/json
+	Authorization: Bearer {RESPONSE id=8 json:token}
+`
+ID:9
 Type:http
 Response:
 [\del]

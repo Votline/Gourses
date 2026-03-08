@@ -14,11 +14,10 @@ func (cs *CoursesService) NewCourse(c *gin.Context) {
 	const op = "courses.NewCourse"
 
 	req := struct {
-		UserID   string `validate:"required,uuid"`
-		UserRole string `validate:"required,eq=admin"`
-		Name     string `json:"name"  validate:"required"`
-		Desc     string `json:"description"  validate:"required"`
-		Price    string `json:"price" validate:"required"`
+		UserID string `validate:"required,uuid"`
+		Name   string `json:"name"  validate:"required"`
+		Desc   string `json:"description"  validate:"required"`
+		Price  string `json:"price" validate:"required"`
 	}{}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -34,7 +33,6 @@ func (cs *CoursesService) NewCourse(c *gin.Context) {
 	}
 
 	req.UserID = c.GetString("user_id")
-	req.UserRole = c.GetString("user_role")
 
 	if err := cs.val.Struct(req); err != nil {
 		c.JSON(http.StatusBadRequest,
@@ -45,7 +43,6 @@ func (cs *CoursesService) NewCourse(c *gin.Context) {
 	res, err := services.Execute(cs.cb, func() (*pb.NewCourseRes, error) {
 		return cs.client.NewCourse(c.Request.Context(), &pb.NewCourseReq{
 			UserId:      req.UserID,
-			UserRole:    req.UserRole,
 			Name:        req.Name,
 			Description: req.Desc,
 			Price:       req.Price,

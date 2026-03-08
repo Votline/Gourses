@@ -8,6 +8,7 @@ import (
 
 	pb "github.com/Votline/Gourses/protos/generated-users"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 const redisTTL = 3600 * 24 * 30
@@ -90,6 +91,67 @@ func (us *UsersService) Login(c *gin.Context) {
 	)
 
 	c.JSON(http.StatusOK, gin.H{"token": res.Token, "user_id": res.UserId})
+}
+
+func (us *UsersService) UpdateUser(c *gin.Context) {
+	req := struct {
+		UserID      string `validate:"required,uuid"`
+		SessionKey  string `validate:"required,uuid"`
+		UserRole    string `validate:"required,oneof=admin teacher user guest dev"`
+		NewRole     string `json:"new_role" validate:"required,oneof=admin teacher user guest dev"`
+		NewName     string `json:"new_name" validate:"required"`
+		NewEmail    string `json:"new_email" validate:"required,email"`
+		NewPassword string `json:"new_password" validate:"required,min=8"`
+	}{}
+
+	req.UserID = c.GetString("user_id")
+	req.UserRole = c.GetString("user_role")
+	req.SessionKey = c.GetString("session_key")
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	us.log.Info("user update request",
+		zap.String("user_id", req.UserID),
+		zap.String("user_role", req.UserRole),
+		zap.String("session_key", req.SessionKey),
+		zap.String("new_role", req.NewRole),
+		zap.String("new_name", req.NewName),
+		zap.String("new_email", req.NewEmail),
+		zap.String("new_password", req.NewPassword),
+	)
+
+	if err := us.val.Struct(req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "validation failed: " + err.Error()})
+		return
+	}
+
+	res, err := services.Execute(us.cb, func() (*pb.UpdateRes, error) {
+		return us.client.UpdateUser(c.Request.Context(), &pb.UpdateReq{
+			UserId:      req.UserID,
+			UserRole:    req.UserRole,
+			SessionKey:  req.SessionKey,
+			NewName:     req.NewName,
+			NewEmail:    req.NewEmail,
+			NewRole:     req.NewRole,
+			NewPassword: req.NewPassword,
+		})
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.SetCookie(
+		"session_key",
+		res.SessionKey,
+		redisTTL, "/", "localhost",
+		false, true,
+	)
+
+	c.JSON(http.StatusOK, gin.H{"token": res.Token, "user_id": req.UserID})
 }
 
 func (us *UsersService) DeleteUser(c *gin.Context) {

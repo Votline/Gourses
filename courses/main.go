@@ -49,14 +49,13 @@ func (c *coursesservice) NewCourse(ctx context.Context, req *pb.NewCourseReq) (*
 	const op = "courses.NewCourse"
 
 	userID := req.GetUserId()
-	userRole := req.GetUserRole()
 	name := req.GetName()
 	desc := req.GetDescription()
 	price := req.GetPrice()
 
 	id := uuid.NewString()
 
-	if err := c.db.NewCourse(id, name, desc, price, userID, userRole); err != nil {
+	if err := c.db.NewCourse(id, name, desc, price, userID); err != nil {
 		c.log.Error(op, zap.Error(err))
 		return nil, fmt.Errorf("%s: new course: %w", op, err)
 	}

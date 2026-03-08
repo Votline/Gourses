@@ -4,7 +4,6 @@ Endpoint:courses.CoursesService/NewCourse
 Data:`
 	{
 		"user_id": "12345",
-		"user_role": "admin",
 		"name": "some_name",
 		"description": "cool desc",
 		"price": "1347"

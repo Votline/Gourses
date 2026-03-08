@@ -121,6 +121,65 @@ func (u *usersserver) LogUser(ctx context.Context, req *pb.LogReq) (res *pb.LogR
 	return &pb.LogRes{Token: token, SessionKey: sk, UserId: ui.ID}, nil
 }
 
+func (u *usersserver) UpdateUser(ctx context.Context, req *pb.UpdateReq) (*pb.UpdateRes, error) {
+	const op = "usersserver.UpdateUser"
+
+	id := req.GetUserId()
+	role := req.GetUserRole()
+	sk := req.GetSessionKey()
+	name := req.GetNewName()
+	email := req.GetNewEmail()
+	newRole := req.GetNewRole()
+	pswd := req.GetNewPassword()
+
+	u.log.Info("UpdateUser",
+		zap.String("id", id),
+		zap.String("role", role),
+		zap.String("sk", sk),
+		zap.String("name", name),
+		zap.String("email", email),
+		zap.String("new_role", newRole),
+		zap.String("new_pswd", pswd),
+	)
+
+	if err := u.rdb.Validate(id, role, sk); err != nil {
+		return nil, fmt.Errorf("%s: validate session: %w", op, err)
+	}
+
+	hashedPswd, err := security.Hash(pswd)
+	if err != nil {
+		return nil, fmt.Errorf("%s: hash password: %w", op, err)
+	}
+
+	newToken, err := security.GenerateToken(id, newRole)
+	if err != nil {
+		return nil, fmt.Errorf("%s: generate token: %w", op, err)
+	}
+
+	newSk := sk
+	if role != newRole {
+		if err := u.rdb.Delete(sk); err != nil {
+			return nil, fmt.Errorf("%s: delete session: %w", op, err)
+		}
+		newSk, err = u.rdb.NewSession(id, newRole)
+		if err != nil {
+			return nil, fmt.Errorf("%s: create session: %w", op, err)
+		}
+	}
+
+	if err := u.db.UpdateUser(id, name+email, newRole, hashedPswd); err != nil {
+		u.log.Error(op, zap.Error(err))
+		if err := u.rdb.Delete(sk); err != nil {
+			u.log.Error("delete session",
+				zap.String("op", op),
+				zap.Error(err))
+		}
+		return nil, fmt.Errorf("%s: update user: %w", op, err)
+	}
+
+	return &pb.UpdateRes{Token: newToken, SessionKey: newSk}, nil
+}
+
 func (u *usersserver) DelUser(ctx context.Context, req *pb.DelReq) (*pb.DelRes, error) {
 	const op = "usersserver.DelUser"
 
@@ -131,6 +190,10 @@ func (u *usersserver) DelUser(ctx context.Context, req *pb.DelReq) (*pb.DelRes, 
 
 	if err := u.rdb.Validate(id, role, sk); err != nil {
 		return nil, fmt.Errorf("%s: validate session: %w", op, err)
+	}
+
+	if err := u.rdb.Delete(sk); err != nil {
+		return nil, fmt.Errorf("%s: delete session: %w", op, err)
 	}
 
 	if err := u.db.DelUser(id, role, delUserID); err != nil {

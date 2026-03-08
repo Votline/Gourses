@@ -68,6 +68,7 @@ func (us *UsersService) RegisterRoutes(r *gin.RouterGroup) {
 	verifyGroup.Use(middlewares.SessionKeyMiddleware())
 	{
 		verifyGroup.DELETE("/del/:del_user_id", us.DeleteUser)
+		verifyGroup.PUT("/update", us.UpdateUser)
 	}
 }
 

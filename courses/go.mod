@@ -4,7 +4,7 @@ go 1.25.6
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/Votline/Gourses/protos v0.0.7
+	github.com/Votline/Gourses/protos v0.0.9
 	github.com/google/uuid v1.6.0
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/lib/pq v1.11.2

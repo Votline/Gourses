@@ -54,12 +54,12 @@ func (d *DB) Close() {
 	d.db.Close()
 }
 
-func (d *DB) NewCourse(id, name, desc, price, userID, userRole string) error {
+func (d *DB) NewCourse(id, name, desc, price, userID string) error {
 	const op = "db.NewCourse"
 
 	query, args, err := d.bd.Insert("courses").
-		Columns("id", "name", "description", "price", "user_id", "user_role").
-		Values(id, name, desc, price, userID, userRole).
+		Columns("id", "name", "description", "price", "user_id").
+		Values(id, name, desc, price, userID).
 		Suffix("RETURNING id").
 		ToSql()
 	if err != nil {

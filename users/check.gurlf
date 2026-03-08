@@ -28,23 +28,43 @@ Data:`
 ProtoPath:../protos/users.proto
 ID:1
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyYTliYmJkLTE5N2QtNDM0Ny1iNTliLWJkNjU2ZWNkZDQ2YiIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcyODI0NDk1fQ.92HPc-S4mzbEEYyBAs2OVoHjl7F6uEomSlpdKlDUtEY","sessionKey":"ba206612-6a16-4247-ad2b-0fcc5f99e7f6","userId":"12a9bbbd-197d-4347-b59b-bd656ecdd46b"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MGU3ZWZjLThhMTktNGI2NS1hOGExLWEyMDJmMDI0ZWM1ZSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcyOTY2NzQ4fQ.bxb4vuvQE08_afvwBV1b-HsRqPT_BpLY911BfKJhiOQ","sessionKey":"3ce23670-32de-4d8e-b9d6-d112f7798a86","userId":"250e7efc-8a19-4b65-a8a1-a202f024ec5e"}
 [\log]
+
+[upd]
+Target:localhost:50051
+Endpoint:users.UsersService/UpdateUser
+Data:`
+	{
+		"new_password": "654321",
+		"new_email": "upd@upd.com",
+		"new_name": "updated name",
+		"new_role": "updated user",
+		"user_id": "{RESPONSE id=1 json:userId}",
+		"user_role": "user",
+		"session_key": "{RESPONSE id=1 json:sessionKey}"
+	}
+`
+ProtoPath:../protos/users.proto
+ID:2
+Type:grpc
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MGU3ZWZjLThhMTktNGI2NS1hOGExLWEyMDJmMDI0ZWM1ZSIsInJvbGUiOiJ1cGRhdGVkIHVzZXIiLCJleHAiOjE3NzI5NjY3NDh9.nUKoSmpJ56OvWYxBS9Jfc_keJnnnkC_x18VBglSzoO4","sessionKey":"ab37618f-7092-4fc7-8b6b-86e22df76ec1"}
+[\upd]
 
 [del]
 Target:localhost:50051
 Endpoint:users.UsersService/DelUser
 Data:`
 	{
-		"session_key":"{RESPONSE id=1 json:sessionKey}",
+		"session_key":"{RESPONSE id=2 json:sessionKey}",
 		"del_user_id":"{RESPONSE id=1 json:userId}",
 		"user_id": "{RESPONSE id=1 json:userId}",
-		"user_role": "admin"
+		"user_role": "updated user"
 	}
 `
 ProtoPath:../protos/users.proto
-ID:2
+ID:3
 Type:grpc
-Response:rpc error: code = Unknown desc = usersserver.DelUser: validate session: UsersRedisDB.Validate: invalid session
+Response:{}
 [\del]
 
