@@ -276,7 +276,8 @@ type UpdateReq struct {
 	SessionKey    string                 `protobuf:"bytes,3,opt,name=session_key,json=sessionKey,proto3" json:"session_key,omitempty"`
 	NewName       string                 `protobuf:"bytes,4,opt,name=new_name,json=newName,proto3" json:"new_name,omitempty"`
 	NewEmail      string                 `protobuf:"bytes,5,opt,name=new_email,json=newEmail,proto3" json:"new_email,omitempty"`
-	NewPassword   string                 `protobuf:"bytes,6,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
+	NewRole       string                 `protobuf:"bytes,6,opt,name=new_role,json=newRole,proto3" json:"new_role,omitempty"`
+	NewPassword   string                 `protobuf:"bytes,7,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -342,6 +343,13 @@ func (x *UpdateReq) GetNewName() string {
 func (x *UpdateReq) GetNewEmail() string {
 	if x != nil {
 		return x.NewEmail
+	}
+	return ""
+}
+
+func (x *UpdateReq) GetNewRole() string {
+	if x != nil {
+		return x.NewRole
 	}
 	return ""
 }
@@ -628,15 +636,16 @@ const file_users_proto_rawDesc = "" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1f\n" +
 	"\vsession_key\x18\x02 \x01(\tR\n" +
 	"sessionKey\x12\x17\n" +
-	"\auser_id\x18\x03 \x01(\tR\x06userId\"\xbd\x01\n" +
+	"\auser_id\x18\x03 \x01(\tR\x06userId\"\xd8\x01\n" +
 	"\tUpdateReq\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
 	"\tuser_role\x18\x02 \x01(\tR\buserRole\x12\x1f\n" +
 	"\vsession_key\x18\x03 \x01(\tR\n" +
 	"sessionKey\x12\x19\n" +
 	"\bnew_name\x18\x04 \x01(\tR\anewName\x12\x1b\n" +
-	"\tnew_email\x18\x05 \x01(\tR\bnewEmail\x12!\n" +
-	"\fnew_password\x18\x06 \x01(\tR\vnewPassword\"B\n" +
+	"\tnew_email\x18\x05 \x01(\tR\bnewEmail\x12\x19\n" +
+	"\bnew_role\x18\x06 \x01(\tR\anewRole\x12!\n" +
+	"\fnew_password\x18\a \x01(\tR\vnewPassword\"B\n" +
 	"\tUpdateRes\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1f\n" +
 	"\vsession_key\x18\x02 \x01(\tR\n" +

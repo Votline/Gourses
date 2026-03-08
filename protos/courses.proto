@@ -5,10 +5,9 @@ option go_package = "./;coursesservice";
 
 message NewCourseReq {
   string user_id = 1;
-  string user_role = 2;
-  string name = 3;
-  string description = 4;
-  string price = 5;
+  string name = 2;
+  string description = 3;
+  string price = 4;
 }
 message NewCourseRes {
   string course_id = 1;

@@ -24,10 +24,9 @@ const (
 type NewCourseReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	UserRole      string                 `protobuf:"bytes,2,opt,name=user_role,json=userRole,proto3" json:"user_role,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	Price         string                 `protobuf:"bytes,5,opt,name=price,proto3" json:"price,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Price         string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -65,13 +64,6 @@ func (*NewCourseReq) Descriptor() ([]byte, []int) {
 func (x *NewCourseReq) GetUserId() string {
 	if x != nil {
 		return x.UserId
-	}
-	return ""
-}
-
-func (x *NewCourseReq) GetUserRole() string {
-	if x != nil {
-		return x.UserRole
 	}
 	return ""
 }
@@ -473,13 +465,12 @@ var File_courses_proto protoreflect.FileDescriptor
 
 const file_courses_proto_rawDesc = "" +
 	"\n" +
-	"\rcourses.proto\x12\acourses\"\x90\x01\n" +
+	"\rcourses.proto\x12\acourses\"s\n" +
 	"\fNewCourseReq\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tuser_role\x18\x02 \x01(\tR\buserRole\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x14\n" +
-	"\x05price\x18\x05 \x01(\tR\x05price\"+\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x14\n" +
+	"\x05price\x18\x04 \x01(\tR\x05price\"+\n" +
 	"\fNewCourseRes\x12\x1b\n" +
 	"\tcourse_id\x18\x01 \x01(\tR\bcourseId\"+\n" +
 	"\fGetCourseReq\x12\x1b\n" +

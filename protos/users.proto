@@ -32,7 +32,8 @@ message UpdateReq {
   string session_key = 3;
   string new_name = 4;
   string new_email = 5;
-  string new_password = 6;
+  string new_role = 6;
+  string new_password = 7;
 }
 message UpdateRes {
   string token = 1;
