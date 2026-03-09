@@ -1,27 +1,18 @@
 package middlewares
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"os"
 	"strings"
 
-	pb "github.com/Votline/Gourses/protos/generated-users"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 const jwtLength = 100
 
-type UserInfo struct {
-	ID    string `json:"id"`
-	Role  string `json:"role"`
-	token *jwt.Token
-	jwt.RegisteredClaims
-}
-
-func JWTMiddleware(validate func(ctx context.Context, tokenStr, sessionKey string) (*pb.ValidateRes, error)) gin.HandlerFunc {
+func (m *Mdwr) JWTMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
@@ -53,7 +44,7 @@ func JWTMiddleware(validate func(ctx context.Context, tokenStr, sessionKey strin
 			return
 		}
 
-		userInfo, err := CheckJWT(tokenStr, c, validate)
+		userInfo, err := m.checkJWT(tokenStr, c)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized,
 				gin.H{"error": "Invalid token: " + err.Error()})
@@ -66,7 +57,7 @@ func JWTMiddleware(validate func(ctx context.Context, tokenStr, sessionKey strin
 	}
 }
 
-func CheckJWT(tokenStr string, c *gin.Context, validate func(ctx context.Context, tokenStr, sessionKey string) (*pb.ValidateRes, error)) (UserInfo, error) {
+func (m *Mdwr) checkJWT(tokenStr string, c *gin.Context) (UserInfo, error) {
 	const op = "middlewares.CheckJWT"
 
 	claims, err := extractJWTData(tokenStr)
@@ -79,7 +70,7 @@ func CheckJWT(tokenStr string, c *gin.Context, validate func(ctx context.Context
 		if err != nil {
 			return UserInfo{}, fmt.Errorf("%s: extract session key %w", op, err)
 		}
-		res, err := validate(c.Request.Context(), tokenStr, sk)
+		res, err := m.validate(c.Request.Context(), tokenStr, sk)
 		if err != nil {
 			return UserInfo{}, fmt.Errorf("%s: rpc validate %w", op, err)
 		}

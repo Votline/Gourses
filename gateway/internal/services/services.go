@@ -4,6 +4,8 @@ import (
 	"errors"
 	"time"
 
+	"gateway/internal/middlewares"
+
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sony/gobreaker/v2"
@@ -13,7 +15,7 @@ import (
 
 type Service interface {
 	GetName() string
-	RegisterRoutes(r *gin.RouterGroup)
+	RegisterRoutes(r *gin.RouterGroup, mdwr *middlewares.Mdwr)
 	IncrCounter(name string)
 	NewTimer(name, method string) *prometheus.Timer
 }

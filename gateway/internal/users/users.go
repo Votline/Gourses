@@ -58,13 +58,13 @@ func (us *UsersService) GetName() string {
 	return us.name
 }
 
-func (us *UsersService) RegisterRoutes(r *gin.RouterGroup) {
-	r.Use(middlewares.Metrics(us))
+func (us *UsersService) RegisterRoutes(r *gin.RouterGroup, mdwr *middlewares.Mdwr) {
+	r.Use(mdwr.Metrics(us.NewTimer, us.IncrCounter))
 	r.POST("/reg", us.Register)
 	r.POST("/log", us.Login)
 
 	verifyGroup := r.Group("")
-	verifyGroup.Use(middlewares.JWTMiddleware(us.Validate))
+	verifyGroup.Use(mdwr.JWTMiddleware())
 	verifyGroup.Use(middlewares.SessionKeyMiddleware())
 	{
 		verifyGroup.DELETE("/del/:del_user_id", us.DeleteUser)

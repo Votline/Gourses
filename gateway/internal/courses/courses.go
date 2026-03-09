@@ -1,7 +1,6 @@
 package courses
 
 import (
-	"context"
 	"os"
 
 	"gateway/internal/cbreaker"
@@ -9,7 +8,6 @@ import (
 	"gateway/internal/services"
 
 	pb "github.com/Votline/Gourses/protos/generated-courses"
-	pbU "github.com/Votline/Gourses/protos/generated-users"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/prometheus/client_golang/prometheus"
@@ -28,10 +26,9 @@ type CoursesService struct {
 	cb             *gobreaker.CircuitBreaker[any]
 	metricsCounter *prometheus.CounterVec
 	metricsHist    *prometheus.HistogramVec
-	Validate       func(ctx context.Context, tokenStr, sessionKey string) (*pbU.ValidateRes, error)
 }
 
-func New(log *zap.Logger, resTime *prometheus.HistogramVec, validate func(ctx context.Context, tokenStr, sessionKey string) (*pbU.ValidateRes, error)) services.Service {
+func New(log *zap.Logger, resTime *prometheus.HistogramVec) services.Service {
 	log.Debug("Creating courses service",
 		zap.String("address",
 			os.Getenv("COURSES_HOST")+":"+os.Getenv("COURSES_PORT")),
@@ -60,7 +57,6 @@ func New(log *zap.Logger, resTime *prometheus.HistogramVec, validate func(ctx co
 			},
 			[]string{"operation"},
 		),
-		Validate: validate,
 	}
 }
 
@@ -68,9 +64,9 @@ func (cs *CoursesService) GetName() string {
 	return cs.name
 }
 
-func (cs *CoursesService) RegisterRoutes(r *gin.RouterGroup) {
-	r.Use(middlewares.Metrics(cs))
-	r.Use(middlewares.JWTMiddleware(cs.Validate))
+func (cs *CoursesService) RegisterRoutes(r *gin.RouterGroup, mdwr *middlewares.Mdwr) {
+	r.Use(mdwr.Metrics(cs.NewTimer, cs.IncrCounter))
+	r.Use(mdwr.JWTMiddleware())
 
 	r.POST("/new", cs.NewCourse)
 	r.GET("/get/:course_id", cs.GetCourse)

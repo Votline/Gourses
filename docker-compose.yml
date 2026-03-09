@@ -66,13 +66,25 @@ services:
   redis_sk:
     image: redis:alpine
     ports:
-      - "${REDIS_SK_PORT}:${REDIS_SK_PORT}"
+      - "${REDIS_SK_PORT}:${REDIS_PORT}"
     networks:
       - backend
     command:
       - redis-server
       - "--requirepass"
-      - "${REDIS_SK_PSWD}"
+      - "${REDIS_SK_PASSWORD}"
+      - "--loglevel warning"
+
+  redis_rl:
+    image: redis:alpine
+    ports:
+      - "${REDIS_RL_PORT}:${REDIS_PORT}"
+    networks:
+      - backend
+    command:
+      - redis-server
+      - "--requirepass"
+      - "${REDIS_RL_PASSWORD}"
       - "--loglevel warning"
 
   prometheus:

@@ -3,12 +3,11 @@ package middlewares
 import (
 	"strings"
 
-	"gateway/internal/services"
-
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
-func Metrics(svc services.Service) gin.HandlerFunc {
+func (m *Mdwr) Metrics(newTimer func(name, operation string) *prometheus.Timer, incr func(name string)) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		parts := strings.Split(strings.Trim(c.Request.URL.String(), "/"), "/")
 		// [api, serviceName, operation]
@@ -21,10 +20,10 @@ func Metrics(svc services.Service) gin.HandlerFunc {
 		serviceName := parts[1]
 		operation := parts[2]
 
-		timer := svc.NewTimer(serviceName, operation)
+		timer := newTimer(serviceName, operation)
 		defer timer.ObserveDuration()
 
-		svc.IncrCounter(operation)
+		incr(serviceName)
 
 		c.Next()
 	}

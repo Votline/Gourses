@@ -8,7 +8,6 @@ import (
 
 	pb "github.com/Votline/Gourses/protos/generated-users"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 const redisTTL = 3600 * 24 * 30
@@ -112,16 +111,6 @@ func (us *UsersService) UpdateUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	us.log.Info("user update request",
-		zap.String("user_id", req.UserID),
-		zap.String("user_role", req.UserRole),
-		zap.String("session_key", req.SessionKey),
-		zap.String("new_role", req.NewRole),
-		zap.String("new_name", req.NewName),
-		zap.String("new_email", req.NewEmail),
-		zap.String("new_password", req.NewPassword),
-	)
 
 	if err := us.val.Struct(req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "validation failed: " + err.Error()})

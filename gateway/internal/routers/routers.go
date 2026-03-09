@@ -2,6 +2,7 @@ package routers
 
 import (
 	"gateway/internal/courses"
+	"gateway/internal/middlewares"
 	"gateway/internal/services"
 	"gateway/internal/users"
 
@@ -31,15 +32,23 @@ func Init(log *zap.Logger) *gin.Engine {
 
 func initServices(r *gin.Engine, log *zap.Logger) {
 	us := users.New(log, resTime).(*users.UsersService)
+
+	mdwr, err := middlewares.NewMdwr(us.Validate)
+	if err != nil {
+		log.Fatal("NewMdwr", zap.Error(err))
+	}
+
 	svcs := [2]services.Service{
 		us,
-		courses.New(log, resTime, us.Validate),
+		courses.New(log, resTime),
 	}
+
+	r.Use(mdwr.RateLimit())
 
 	for _, svc := range svcs {
 		path := "/api/" + svc.GetName()
 		group := r.Group(path)
 
-		svc.RegisterRoutes(group)
+		svc.RegisterRoutes(group, mdwr)
 	}
 }
