@@ -87,6 +87,18 @@ services:
       - "${REDIS_RL_PASSWORD}"
       - "--loglevel warning"
 
+  redis_bk:
+    image: redis:alpine
+    ports:
+      - "${REDIS_BK_PORT}:${REDIS_PORT}"
+    networks:
+      - backend
+    command:
+      - redis-server
+      - "--requirepass"
+      - "${REDIS_BK_PASSWORD}"
+      - "--loglevel warning"
+
   prometheus:
     image: prom/prometheus
     ports:

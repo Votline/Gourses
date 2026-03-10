@@ -1,0 +1,97 @@
+[reg]
+URL:http://localhost:8080/api/users/reg
+Method:POST
+Body:`
+	{
+		"name": "Viza",
+		"email": "some@mail.com",
+		"role":"admin",
+		"password":"eightpswd"
+	}
+`
+Headers:Content-Type: application/json
+ID:0
+Type:http
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkZjc3Mjk0LWRiZTgtNGQ3ZS1iZTQxLTdhYjU5OTNhMTdlZSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzA1MTkyMX0.XC-mc1t6--EZpxjgsALMY5yr2ffMHrR5C8iBJu3kPtI","user_id":"2df77294-dbe8-4d7e-be41-7ab5993a17ee"}
+CookieOut:`
+[localhost:8080]
+ session_key:baff1d9f-bb49-4b6b-99f9-d4bc9305070d
+ Path:/
+ Domain:localhost
+ Max-Age:2592000
+ HttpOnly:
+[\localhost:8080]
+`
+[\reg]
+
+[log]
+URL:http://localhost:8080/api/users/log
+Method:POST
+Body:`
+	{
+		"name": "Viza",
+		"email": "some@mail.com",
+		"password":"eightpswd"
+	}
+`
+Headers:Content-Type: application/json
+ID:1
+Type:http
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkZjc3Mjk0LWRiZTgtNGQ3ZS1iZTQxLTdhYjU5OTNhMTdlZSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzA1MTkyMX0.XC-mc1t6--EZpxjgsALMY5yr2ffMHrR5C8iBJu3kPtI","user_id":"2df77294-dbe8-4d7e-be41-7ab5993a17ee"}
+CookieOut:`
+[localhost:8080]
+ session_key:0ad863fa-e216-4dc8-8957-e94160744369
+ Path:/
+ Domain:localhost
+ Max-Age:2592000
+ HttpOnly:
+[\localhost:8080]
+`
+[\log]
+
+[new_course]
+URL:http://localhost:8080/api/courses/new
+Method:POST
+Body:`
+	{"name": "some", "description": "some more", "price": "12345"}
+`
+Headers:`
+	Content-Type: application/json
+	Authorization: Bearer {RESPONSE id=1 json:token}
+`
+ID:2
+Type:http
+Response:{"course_id":"ca059b32-fe85-494b-bf9c-b53485bd28bb"}
+[\new_course]
+
+[get_course]
+URL:http://localhost:8080/api/courses/get/{RESPONSE id=2 json:course_id}
+Method:GET
+Headers:`
+	Content-Type: application/json
+	Authorization: Bearer {RESPONSE id=1 json:token}
+`
+ID:3
+Type:http
+Response:{"course_id":"ca059b32-fe85-494b-bf9c-b53485bd28bb","description":"some more","name":"some","price":"12345"}
+[\get_course]
+
+[del]
+URL:http://localhost:8080/api/users/del/{RESPONSE id=1 json:user_id}
+Method:DELETE
+Headers:`
+	Content-Type: application/json
+	Authorization: Bearer {RESPONSE id=1 json:token}
+`
+ID:4
+Type:http
+Response:
+[\del]
+
+[get_should_delete_course]
+TargetID:3
+ID:5
+Type:repeat
+Response:{"course_id":"ca059b32-fe85-494b-bf9c-b53485bd28bb","description":"some more","name":"some","price":"12345"}
+[\get_should_delete_course]
+

@@ -60,7 +60,6 @@ func (d *DB) NewCourse(id, name, desc, price, userID string) error {
 	query, args, err := d.bd.Insert("courses").
 		Columns("id", "name", "description", "price", "user_id").
 		Values(id, name, desc, price, userID).
-		Suffix("RETURNING id").
 		ToSql()
 	if err != nil {
 		return fmt.Errorf("%s: create query: %w", op, err)
@@ -133,6 +132,29 @@ func (d *DB) DeleteCourse(id, userID, userRole string) error {
 	}
 
 	query, args, err := q.ToSql()
+	if err != nil {
+		return fmt.Errorf("%s: delete query: %w", op, err)
+	}
+
+	res, err := d.db.Exec(query, args...)
+	if err != nil {
+		return fmt.Errorf("%s: delete course: %w", op, err)
+	}
+	if n, err := res.RowsAffected(); err != nil {
+		return fmt.Errorf("%s: delete course: %w", op, err)
+	} else if n == 0 {
+		return fmt.Errorf("%s: no course found", op)
+	}
+
+	return nil
+}
+
+func (d *DB) DeleteCourseByID(userID string) error {
+	const op = "db.DeleteCouseByID"
+
+	query, args, err := d.bd.Delete("courses").
+		Where(sq.Eq{"user_id": userID}).
+		ToSql()
 	if err != nil {
 		return fmt.Errorf("%s: delete query: %w", op, err)
 	}

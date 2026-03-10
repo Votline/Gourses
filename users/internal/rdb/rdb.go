@@ -22,6 +22,7 @@ type RDB struct {
 
 func NewRDB(log *zap.Logger) (*RDB, error) {
 	const op = "rdb.NewRDB"
+
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     os.Getenv("REDIS_SK_HOST") + ":" + os.Getenv("REDIS_PORT"),
 		Password: os.Getenv("REDIS_SK_PASSWORD"),

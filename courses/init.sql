@@ -7,3 +7,4 @@ CREATE TABLE IF NOT EXISTS courses (
 );
 
 CREATE INDEX IF NOT EXISTS idx_id ON courses(id);
+CREATE INDEX IF NOT EXISTS idx_user_id ON courses(user_id);

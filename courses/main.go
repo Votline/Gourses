@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 
+	"courses/internal/broker"
 	"courses/internal/db"
 
 	pb "github.com/Votline/Gourses/protos/generated-courses"
@@ -36,7 +37,19 @@ func main() {
 	defer db.Close()
 	log.Info("Connected to database")
 
+	broker, err := broker.NewBroker(log)
+	if err != nil {
+		log.Fatal("failed to create broker", zap.Error(err))
+	}
+	defer broker.Close()
+	log.Info("Connected to broker")
+
 	c := coursesservice{log: log, db: db}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go c.listenDelete(ctx, broker)
+
 	srv := grpc.NewServer()
 	pb.RegisterCoursesServiceServer(srv, &c)
 	if err := srv.Serve(lis); err != nil {
@@ -113,4 +126,41 @@ func (c *coursesservice) DeleteCourse(ctx context.Context, req *pb.DeleteCourseR
 	}
 
 	return &pb.DeleteCourseRes{}, nil
+}
+
+func (c *coursesservice) listenDelete(ctx context.Context, broker *broker.Broker) {
+	const op = "courses.listenDelete"
+
+	sub := broker.Subscribe(ctx, "users:delete")
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case msg, ok := <-sub:
+			if !ok {
+				return
+			}
+
+			c.log.Debug("Received message",
+				zap.String("op", op),
+				zap.String("msg", msg))
+
+			err := c.deleteCourseByID(msg)
+			if err != nil {
+				c.log.Error(op, zap.Error(err))
+			}
+		}
+	}
+}
+
+func (c *coursesservice) deleteCourseByID(id string) error {
+	const op = "courses.deleteCourseByID"
+
+	if err := c.db.DeleteCourseByID(id); err != nil {
+		c.log.Error(op, zap.Error(err))
+		return fmt.Errorf("%s: delete course: %w", op, err)
+	}
+
+	return nil
 }

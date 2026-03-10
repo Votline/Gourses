@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 
+	"users/internal/broker"
 	"users/internal/db"
 	"users/internal/rdb"
 	"users/internal/security"
@@ -20,6 +21,7 @@ type usersserver struct {
 	log *zap.Logger
 	db  *db.DB
 	rdb *rdb.RDB
+	brk *broker.Broker
 	pb.UnimplementedUsersServiceServer
 }
 
@@ -46,7 +48,14 @@ func main() {
 	defer rdb.Close()
 	log.Info("Connected to redis")
 
-	u := usersserver{log: log, db: db, rdb: rdb}
+	broker, err := broker.NewBroker(log)
+	if err != nil {
+		log.Fatal("Failed to create broker", zap.Error(err))
+	}
+	defer broker.Close()
+	log.Info("Connected to broker")
+
+	u := usersserver{log: log, db: db, rdb: rdb, brk: broker}
 	srv := grpc.NewServer()
 	pb.RegisterUsersServiceServer(srv, &u)
 	if err := srv.Serve(lis); err != nil {
@@ -132,16 +141,6 @@ func (u *usersserver) UpdateUser(ctx context.Context, req *pb.UpdateReq) (*pb.Up
 	newRole := req.GetNewRole()
 	pswd := req.GetNewPassword()
 
-	u.log.Info("UpdateUser",
-		zap.String("id", id),
-		zap.String("role", role),
-		zap.String("sk", sk),
-		zap.String("name", name),
-		zap.String("email", email),
-		zap.String("new_role", newRole),
-		zap.String("new_pswd", pswd),
-	)
-
 	if err := u.rdb.Validate(id, role, sk); err != nil {
 		return nil, fmt.Errorf("%s: validate session: %w", op, err)
 	}
@@ -199,6 +198,11 @@ func (u *usersserver) DelUser(ctx context.Context, req *pb.DelReq) (*pb.DelRes, 
 	if err := u.db.DelUser(id, role, delUserID); err != nil {
 		u.log.Error(op, zap.Error(err))
 		return nil, fmt.Errorf("%s: delete user: %w", op, err)
+	}
+
+	if err := u.brk.Publish("users:delete", id); err != nil {
+		u.log.Error(op, zap.Error(err))
+		return nil, fmt.Errorf("%s: publish message: %w", op, err)
 	}
 
 	return &pb.DelRes{}, nil
