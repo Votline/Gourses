@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	gc "users/internal/gracefulshutdown"
 	"users/internal/security"
 
 	"github.com/go-redis/redis/v8"
@@ -41,8 +42,8 @@ func NewRDB(log *zap.Logger) (*RDB, error) {
 	}, nil
 }
 
-func (r *RDB) Close() error {
-	return r.rdb.Close()
+func (r *RDB) Close(ctx context.Context) error {
+	return gc.Shutdown(r.rdb.Close, ctx)
 }
 
 func (r *RDB) NewSession(id, role string) (string, error) {

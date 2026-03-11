@@ -1,9 +1,11 @@
 package users
 
 import (
+	"context"
 	"os"
 
 	"gateway/internal/cbreaker"
+	gc "gateway/internal/gracefulshutdown"
 	"gateway/internal/middlewares"
 	"gateway/internal/services"
 
@@ -80,4 +82,8 @@ func (us *UsersService) NewTimer(name, operation string) *prometheus.Timer {
 	return prometheus.NewTimer(prometheus.ObserverFunc(func(t float64) {
 		us.metricsHist.WithLabelValues(name, operation).Observe(t)
 	}))
+}
+
+func (us *UsersService) Close(ctx context.Context) error {
+	return gc.Shutdown(us.conn.Close, ctx)
 }

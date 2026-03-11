@@ -1,9 +1,12 @@
 package db
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
+
+	gc "courses/internal/gracefulshutdown"
 
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
@@ -50,8 +53,8 @@ func NewDB(log *zap.Logger) (*DB, error) {
 	}, nil
 }
 
-func (d *DB) Close() {
-	d.db.Close()
+func (d *DB) Close(ctx context.Context) error {
+	return gc.Shutdown(d.db.Close, ctx)
 }
 
 func (d *DB) NewCourse(id, name, desc, price, userID string) error {

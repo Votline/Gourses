@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -18,6 +19,7 @@ type Service interface {
 	RegisterRoutes(r *gin.RouterGroup, mdwr *middlewares.Mdwr)
 	IncrCounter(name string)
 	NewTimer(name, method string) *prometheus.Timer
+	Close(ctx context.Context) error
 }
 
 func Execute[T any](cb *gobreaker.CircuitBreaker[any], fn func() (T, error)) (T, error) {

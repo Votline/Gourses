@@ -1,9 +1,11 @@
 package courses
 
 import (
+	"context"
 	"os"
 
 	"gateway/internal/cbreaker"
+	gc "gateway/internal/gracefulshutdown"
 	"gateway/internal/middlewares"
 	"gateway/internal/services"
 
@@ -82,4 +84,8 @@ func (cs *CoursesService) NewTimer(name, operation string) *prometheus.Timer {
 	return prometheus.NewTimer(prometheus.ObserverFunc(func(t float64) {
 		cs.metricsHist.WithLabelValues(name, operation).Observe(t)
 	}))
+}
+
+func (cs *CoursesService) Close(ctx context.Context) error {
+	return gc.Shutdown(cs.conn.Close, ctx)
 }

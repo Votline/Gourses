@@ -5,9 +5,13 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"users/internal/broker"
 	"users/internal/db"
+	gc "users/internal/gracefulshutdown"
 	"users/internal/rdb"
 	"users/internal/security"
 
@@ -34,34 +38,71 @@ func main() {
 		log.Fatal("Failed to listen", zap.Error(err))
 	}
 
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	db, err := db.NewDB(log)
 	if err != nil {
 		log.Fatal("Failed to create database", zap.Error(err))
 	}
-	defer db.Close()
+	defer db.Close(ctx)
 	log.Info("Connected to database")
 
 	rdb, err := rdb.NewRDB(log)
 	if err != nil {
 		log.Fatal("Failed to create redis", zap.Error(err))
 	}
-	defer rdb.Close()
+	defer rdb.Close(ctx)
 	log.Info("Connected to redis")
 
 	broker, err := broker.NewBroker(log)
 	if err != nil {
 		log.Fatal("Failed to create broker", zap.Error(err))
 	}
-	defer broker.Close()
+	defer broker.Close(ctx)
 	log.Info("Connected to broker")
 
 	u := usersserver{log: log, db: db, rdb: rdb, brk: broker}
 	srv := grpc.NewServer()
 	pb.RegisterUsersServiceServer(srv, &u)
-	if err := srv.Serve(lis); err != nil {
-		log.Fatal("Failed to serve", zap.Error(err))
+	go func() {
+		if err := srv.Serve(lis); err != nil {
+			log.Fatal("Failed to serve", zap.Error(err))
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+	gracefulShutdown(&u, srv, log)
+}
+
+func gracefulShutdown(u *usersserver, srv *grpc.Server, log *zap.Logger) {
+	log.Info("Shutting down server")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	log.Info("Shutting down gRPC server")
+	if err := gc.Shutdown(
+		func() error { srv.GracefulStop(); return nil }, ctx); err != nil {
+		log.Error("Failed to shutdown server", zap.Error(err))
 	}
-	defer srv.Stop()
+
+	log.Info("Shutting down postgres")
+	if err := u.db.Close(ctx); err != nil {
+		log.Error("Failed to shutdown postgres", zap.Error(err))
+	}
+
+	log.Info("Shutting down redis")
+	if err := u.rdb.Close(ctx); err != nil {
+		log.Error("Failed to shutdown redis", zap.Error(err))
+	}
+
+	log.Info("Shutting down broker")
+	if err := u.brk.Close(ctx); err != nil {
+		log.Error("Failed to shutdown broker", zap.Error(err))
+	}
 }
 
 func (u *usersserver) RegUser(ctx context.Context, req *pb.RegReq) (*pb.RegRes, error) {

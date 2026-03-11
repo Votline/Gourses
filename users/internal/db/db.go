@@ -1,10 +1,12 @@
 package db
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
 
+	gc "users/internal/gracefulshutdown"
 	"users/internal/security"
 
 	sq "github.com/Masterminds/squirrel"
@@ -44,8 +46,8 @@ func NewDB(log *zap.Logger) (*DB, error) {
 	}, nil
 }
 
-func (d *DB) Close() error {
-	return d.db.Close()
+func (d *DB) Close(ctx context.Context) error {
+	return gc.Shutdown(d.db.Close, ctx)
 }
 
 func (d *DB) RegUser(id, username, role, pswd string) error {

@@ -5,9 +5,13 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"courses/internal/broker"
 	"courses/internal/db"
+	gc "courses/internal/gracefulshutdown"
 
 	pb "github.com/Votline/Gourses/protos/generated-courses"
 	"github.com/google/uuid"
@@ -30,32 +34,65 @@ func main() {
 		log.Fatal("failed to listen", zap.Error(err))
 	}
 
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	db, err := db.NewDB(log)
 	if err != nil {
 		log.Fatal("failed to connect to db", zap.Error(err))
 	}
-	defer db.Close()
+	defer db.Close(ctx)
 	log.Info("Connected to database")
 
 	broker, err := broker.NewBroker(log)
 	if err != nil {
 		log.Fatal("failed to create broker", zap.Error(err))
 	}
-	defer broker.Close()
+	defer broker.Close(ctx)
 	log.Info("Connected to broker")
 
 	c := coursesservice{log: log, db: db}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
 	go c.listenDelete(ctx, broker)
 
 	srv := grpc.NewServer()
 	pb.RegisterCoursesServiceServer(srv, &c)
-	if err := srv.Serve(lis); err != nil {
-		log.Fatal("failed to serve", zap.Error(err))
+	go func() {
+		if err := srv.Serve(lis); err != nil {
+			log.Fatal("failed to serve", zap.Error(err))
+		}
+		defer srv.Stop()
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+	gracefulShutdown(&c, srv, broker, log)
+}
+
+func gracefulShutdown(c *coursesservice, srv *grpc.Server, broker *broker.Broker, log *zap.Logger) {
+	const op = "courses.gracefulShutdown"
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	log.Info("Shutting down gRPC server")
+	if err := gc.Shutdown(
+		func() error { srv.GracefulStop(); return nil }, ctx); err != nil {
+		log.Error(op, zap.Error(err))
 	}
-	defer srv.Stop()
+
+	log.Info("Shutting down postgres")
+	if err := c.db.Close(ctx); err != nil {
+		log.Error(op, zap.Error(err))
+	}
+
+	log.Info("Shutting down broker")
+	if err := broker.Close(ctx); err != nil {
+		log.Error(op, zap.Error(err))
+	}
+
+	log.Info("Shutting down")
 }
 
 func (c *coursesservice) NewCourse(ctx context.Context, req *pb.NewCourseReq) (*pb.NewCourseRes, error) {
@@ -139,6 +176,7 @@ func (c *coursesservice) listenDelete(ctx context.Context, broker *broker.Broker
 			return
 		case msg, ok := <-sub:
 			if !ok {
+				c.log.Info("Broker closed")
 				return
 			}
 

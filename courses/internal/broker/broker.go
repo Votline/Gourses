@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	gc "courses/internal/gracefulshutdown"
+
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 )
@@ -34,8 +36,8 @@ func NewBroker(log *zap.Logger) (*Broker, error) {
 	}, nil
 }
 
-func (b *Broker) Close() {
-	b.channel.Close()
+func (b *Broker) Close(ctx context.Context) error {
+	return gc.Shutdown(b.channel.Close, ctx)
 }
 
 func (b *Broker) Subscribe(ctx context.Context, channel string) <-chan string {
