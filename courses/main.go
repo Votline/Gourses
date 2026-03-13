@@ -34,7 +34,7 @@ func main() {
 		log.Fatal("failed to listen", zap.Error(err))
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	db, err := db.NewDB(log)

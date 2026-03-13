@@ -12,7 +12,7 @@ Data:`
 ProtoPath:../protos/courses.proto
 ID:0
 Type:grpc
-Response:{"courseId":"7322c7f1-af9f-43c1-b12f-54ba3d611a24"}
+Response:{"courseId":"80467665-3512-48e9-8782-ba86065a64f9"}
 [\new_course]
 
 [get_course]
@@ -26,7 +26,7 @@ Data:`
 ProtoPath:../protos/courses.proto
 ID:1
 Type:grpc
-Response:{"courseId":"7322c7f1-af9f-43c1-b12f-54ba3d611a24","name":"some_name","desciption":"cool desc","price":"1347"}
+Response:{"courseId":"80467665-3512-48e9-8782-ba86065a64f9","name":"some_name","desciption":"cool desc","price":"1347"}
 [\get_course]
 
 [update_course]
@@ -52,7 +52,7 @@ Response:{}
 TargetID:1
 ID:3
 Type:repeat
-Response:{"courseId":"7322c7f1-af9f-43c1-b12f-54ba3d611a24","name":"the new name","desciption":"the new cool desc","price":"13557"}
+Response:{"courseId":"80467665-3512-48e9-8782-ba86065a64f9","name":"the new name","desciption":"the new cool desc","price":"13557"}
 [\get_update_course]
 
 [del_course]

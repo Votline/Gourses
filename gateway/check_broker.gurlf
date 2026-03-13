@@ -12,10 +12,10 @@ Body:`
 Headers:Content-Type: application/json
 ID:0
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkZjc3Mjk0LWRiZTgtNGQ3ZS1iZTQxLTdhYjU5OTNhMTdlZSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzA1MTkyMX0.XC-mc1t6--EZpxjgsALMY5yr2ffMHrR5C8iBJu3kPtI","user_id":"2df77294-dbe8-4d7e-be41-7ab5993a17ee"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQxMDQ2Y2EzLTQxNjYtNGEyZC04NmNmLTA0MTM0OWZiZTZjMSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzM5NTAzMX0.Q5tg1uqh6HdVzAU9qHhGSJJRVhiHSGG7T6xGyYaC9L4","user_id":"41046ca3-4166-4a2d-86cf-041349fbe6c1"}
 CookieOut:`
 [localhost:8080]
- session_key:baff1d9f-bb49-4b6b-99f9-d4bc9305070d
+ session_key:cc8345ff-ce07-46c6-be31-1352e8d3c947
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -37,10 +37,10 @@ Body:`
 Headers:Content-Type: application/json
 ID:1
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkZjc3Mjk0LWRiZTgtNGQ3ZS1iZTQxLTdhYjU5OTNhMTdlZSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzA1MTkyMX0.XC-mc1t6--EZpxjgsALMY5yr2ffMHrR5C8iBJu3kPtI","user_id":"2df77294-dbe8-4d7e-be41-7ab5993a17ee"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQxMDQ2Y2EzLTQxNjYtNGEyZC04NmNmLTA0MTM0OWZiZTZjMSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzM5NTAzMX0.Q5tg1uqh6HdVzAU9qHhGSJJRVhiHSGG7T6xGyYaC9L4","user_id":"41046ca3-4166-4a2d-86cf-041349fbe6c1"}
 CookieOut:`
 [localhost:8080]
- session_key:0ad863fa-e216-4dc8-8957-e94160744369
+ session_key:666959f1-96ad-431f-936a-5ca993b80782
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -61,7 +61,7 @@ Headers:`
 `
 ID:2
 Type:http
-Response:{"course_id":"ca059b32-fe85-494b-bf9c-b53485bd28bb"}
+Response:{"course_id":"5bbb73e2-6b10-4ed4-9914-a5ed43dfc607"}
 [\new_course]
 
 [get_course]
@@ -73,7 +73,7 @@ Headers:`
 `
 ID:3
 Type:http
-Response:{"course_id":"ca059b32-fe85-494b-bf9c-b53485bd28bb","description":"some more","name":"some","price":"12345"}
+Response:{"course_id":"5bbb73e2-6b10-4ed4-9914-a5ed43dfc607","description":"some more","name":"some","price":"12345"}
 [\get_course]
 
 [del]
@@ -92,6 +92,7 @@ Response:
 TargetID:3
 ID:5
 Type:repeat
-Response:{"course_id":"ca059b32-fe85-494b-bf9c-b53485bd28bb","description":"some more","name":"some","price":"12345"}
+Wait:5s
+Response:{"error":"rpc error: code = Unknown desc = courses.GetCourses: get courses: db.GetCourses: get course: sql: no rows in result set"}
 [\get_should_delete_course]
 
