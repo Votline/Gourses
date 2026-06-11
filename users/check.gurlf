@@ -9,11 +9,11 @@ Data:`
 		"role": "user"
 	}
 `
-ProtoPath:../protos/users.proto
+ProtoPath:{VARIABLE key=usersproto ; default=../protos/users.proto}
 ID:0
 Type:grpc
 Expect:0
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgzZGUyYTQwLTk3MTQtNDU2ZS1hMzk3LWRkNGM4Yjc2MWQ1MSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzc1MjQxNzYzfQ.QbY-TCg6x2glDq1caccaR2oww3yokr6ntLgFR3VNidY","sessionKey":"bdbfc42b-71dc-4722-a150-2e756e655618","userId":"83de2a40-9714-456e-a397-dd4c8b761d51"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg4ZDJhYmRmLTNjYWYtNDk5My1iZmFiLTk4YTdkYTliMmZhOCIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzc1NzQyMzQ0fQ.AMAkzoOCGrjnXw56abiLYhLbzQdLsJ8QvzV4mU2y6yk","sessionKey":"96a2682a-f3b0-40f0-93b8-c85eaefe4477","userId":"88d2abdf-3caf-4993-bfab-98a7da9b2fa8"}
 [\reg]
 
 [log]
@@ -26,10 +26,10 @@ Data:`
 		"password":"123456"
 	}
 `
-ProtoPath:../protos/users.proto
+ProtoPath:{VARIABLE key=usersproto ; default=../protos/users.proto}
 ID:1
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgzZGUyYTQwLTk3MTQtNDU2ZS1hMzk3LWRkNGM4Yjc2MWQ1MSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzc1MjQxNzYzfQ.QbY-TCg6x2glDq1caccaR2oww3yokr6ntLgFR3VNidY","sessionKey":"3f39af8d-eda3-4292-93e3-585861b0f472","userId":"83de2a40-9714-456e-a397-dd4c8b761d51"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg4ZDJhYmRmLTNjYWYtNDk5My1iZmFiLTk4YTdkYTliMmZhOCIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzc1NzQyMzQ1fQ.io80PBsbdbIoo0cB5kD-61zvNe_n-FPYtozRoCtkWWE","sessionKey":"ede90626-bc08-4327-ba8e-5d5febe32665","userId":"88d2abdf-3caf-4993-bfab-98a7da9b2fa8"}
 [\log]
 
 [upd]
@@ -46,10 +46,10 @@ Data:`
 		"session_key": "{RESPONSE id=1 json:sessionKey}"
 	}
 `
-ProtoPath:../protos/users.proto
+ProtoPath:{VARIABLE key=usersproto ; default=../protos/users.proto}
 ID:2
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgzZGUyYTQwLTk3MTQtNDU2ZS1hMzk3LWRkNGM4Yjc2MWQ1MSIsInJvbGUiOiJ1cGRhdGVkIHVzZXIiLCJleHAiOjE3NzUyNDE3NjN9.HLRgtJu8mfnR2csTuqV2VBIm_rYjbZbgaYhhZkBLjuU","sessionKey":"891f6a6b-b580-46a0-ac52-76a793b01025"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg4ZDJhYmRmLTNjYWYtNDk5My1iZmFiLTk4YTdkYTliMmZhOCIsInJvbGUiOiJ1cGRhdGVkIHVzZXIiLCJleHAiOjE3NzU3NDIzNDV9.OBHx9mGIU69siTcddEAipAA317GGM3o8WxH-x4t1E7M","sessionKey":"ad23a663-b2ef-4636-ab77-a1d8b4e003e4"}
 [\upd]
 
 [del]
@@ -63,7 +63,7 @@ Data:`
 		"user_role": "updated user"
 	}
 `
-ProtoPath:../protos/users.proto
+ProtoPath:{VARIABLE key=usersproto ; default=../protos/users.proto}
 ID:3
 Type:grpc
 Response:{}

@@ -9,10 +9,10 @@ Data:`
 		"price": "1347"
 	}
 `
-ProtoPath:../protos/courses.proto
+ProtoPath:{VARIABLE key=coursesproto; default=../protos/courses.proto}
 ID:0
 Type:grpc
-Response:
+Response:{"courseId":"ad744600-d67d-4310-b947-a26e021260af"}
 [\new_course]
 
 [get_course]
@@ -23,10 +23,10 @@ Data:`
 		"course_id": "{RESPONSE id=0 json:courseId}"
 	}
 `
-ProtoPath:../protos/courses.proto
+ProtoPath:{VARIABLE key=coursesproto; default=../protos/courses.proto}
 ID:1
 Type:grpc
-Response:
+Response:{"courseId":"ad744600-d67d-4310-b947-a26e021260af","name":"some_name","desciption":"cool desc","price":"1347"}
 [\get_course]
 
 [update_course]
@@ -42,17 +42,17 @@ Data:`
 		"new_price": "13557"
 	}
 `
-ProtoPath:../protos/courses.proto
+ProtoPath:{VARIABLE key=coursesproto; default=../protos/courses.proto}
 ID:2
 Type:grpc
-Response:
+Response:{}
 [\update_course]
 
 [get_update_course]
 TargetID:1
 ID:3
 Type:repeat
-Response:
+Response:{"courseId":"ad744600-d67d-4310-b947-a26e021260af","name":"the new name","desciption":"the new cool desc","price":"13557"}
 [\get_update_course]
 
 [del_course]
@@ -64,9 +64,9 @@ Data:`
 		"user_id": "12345"
 	}
 `
-ProtoPath:../protos/courses.proto
+ProtoPath:{VARIABLE key=coursesproto; default=../protos/courses.proto}
 ID:4
 Type:grpc
-Response:
+Response:{}
 [\del_course]
 

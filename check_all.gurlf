@@ -16,6 +16,11 @@ Response:
 TargetPath:users/check.gurlf
 ID:2
 Type:import
+SetVariables:`
+[vars]
+usersproto:protos/users.proto
+[\vars]
+`
 Response:
 [\import_config]
 
@@ -23,6 +28,11 @@ Response:
 TargetPath:courses/check.gurlf
 ID:3
 Type:import
+SetVariables:`
+[vars]
+coursesproto:protos/courses.proto
+[\vars]
+`
 Response:
 [\import_config]
 
