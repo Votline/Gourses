@@ -12,7 +12,8 @@ Data:`
 ProtoPath:../protos/users.proto
 ID:0
 Type:grpc
-Response:rpc error: code = Unknown desc = usersserver.RegUser: add to db: UsersPostgresDB.RegUser: insert user: pq: duplicate key value violates unique constraint "users_user_name_key" (23505)
+Expect:0
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgzZGUyYTQwLTk3MTQtNDU2ZS1hMzk3LWRkNGM4Yjc2MWQ1MSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzc1MjQxNzYzfQ.QbY-TCg6x2glDq1caccaR2oww3yokr6ntLgFR3VNidY","sessionKey":"bdbfc42b-71dc-4722-a150-2e756e655618","userId":"83de2a40-9714-456e-a397-dd4c8b761d51"}
 [\reg]
 
 [log]
@@ -28,7 +29,7 @@ Data:`
 ProtoPath:../protos/users.proto
 ID:1
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MGU3ZWZjLThhMTktNGI2NS1hOGExLWEyMDJmMDI0ZWM1ZSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzcyOTY2NzQ4fQ.bxb4vuvQE08_afvwBV1b-HsRqPT_BpLY911BfKJhiOQ","sessionKey":"3ce23670-32de-4d8e-b9d6-d112f7798a86","userId":"250e7efc-8a19-4b65-a8a1-a202f024ec5e"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgzZGUyYTQwLTk3MTQtNDU2ZS1hMzk3LWRkNGM4Yjc2MWQ1MSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzc1MjQxNzYzfQ.QbY-TCg6x2glDq1caccaR2oww3yokr6ntLgFR3VNidY","sessionKey":"3f39af8d-eda3-4292-93e3-585861b0f472","userId":"83de2a40-9714-456e-a397-dd4c8b761d51"}
 [\log]
 
 [upd]
@@ -48,7 +49,7 @@ Data:`
 ProtoPath:../protos/users.proto
 ID:2
 Type:grpc
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MGU3ZWZjLThhMTktNGI2NS1hOGExLWEyMDJmMDI0ZWM1ZSIsInJvbGUiOiJ1cGRhdGVkIHVzZXIiLCJleHAiOjE3NzI5NjY3NDh9.nUKoSmpJ56OvWYxBS9Jfc_keJnnnkC_x18VBglSzoO4","sessionKey":"ab37618f-7092-4fc7-8b6b-86e22df76ec1"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgzZGUyYTQwLTk3MTQtNDU2ZS1hMzk3LWRkNGM4Yjc2MWQ1MSIsInJvbGUiOiJ1cGRhdGVkIHVzZXIiLCJleHAiOjE3NzUyNDE3NjN9.HLRgtJu8mfnR2csTuqV2VBIm_rYjbZbgaYhhZkBLjuU","sessionKey":"891f6a6b-b580-46a0-ac52-76a793b01025"}
 [\upd]
 
 [del]

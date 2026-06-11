@@ -241,7 +241,7 @@ func (u *usersserver) DelUser(ctx context.Context, req *pb.DelReq) (*pb.DelRes, 
 		return nil, fmt.Errorf("%s: delete user: %w", op, err)
 	}
 
-	if err := u.brk.Publish("users:delete", id); err != nil {
+	if err := u.brk.PublishToStream("users-deletions", "user_id", id); err != nil {
 		u.log.Error(op, zap.Error(err))
 		return nil, fmt.Errorf("%s: publish message: %w", op, err)
 	}

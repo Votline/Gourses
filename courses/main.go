@@ -53,7 +53,11 @@ func main() {
 
 	c := coursesservice{log: log, db: db}
 
-	go c.listenDelete(ctx, broker)
+	go func() {
+		if err := c.listenDelete(ctx, broker); err != nil {
+			log.Fatal("failed to listen delete", zap.Error(err))
+		}
+	}()
 
 	srv := grpc.NewServer()
 	pb.RegisterCoursesServiceServer(srv, &c)
@@ -165,19 +169,22 @@ func (c *coursesservice) DeleteCourse(ctx context.Context, req *pb.DeleteCourseR
 	return &pb.DeleteCourseRes{}, nil
 }
 
-func (c *coursesservice) listenDelete(ctx context.Context, broker *broker.Broker) {
+func (c *coursesservice) listenDelete(ctx context.Context, broker *broker.Broker) error {
 	const op = "courses.listenDelete"
 
-	sub := broker.Subscribe(ctx, "users:delete")
+	lis, err := broker.ListenStream(ctx, "users-deletions", "courses-group", "instance-1")
+	if err != nil {
+		return fmt.Errorf("%s: listen stream: %w", op, err)
+	}
 
 	for {
 		select {
 		case <-ctx.Done():
-			return
-		case msg, ok := <-sub:
+			return nil
+		case msg, ok := <-lis:
 			if !ok {
 				c.log.Info("Broker closed")
-				return
+				return nil
 			}
 
 			c.log.Debug("Received message",

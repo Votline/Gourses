@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
 	gc "courses/internal/gracefulshutdown"
 
@@ -40,31 +42,70 @@ func (b *Broker) Close(ctx context.Context) error {
 	return gc.Shutdown(b.channel.Close, ctx)
 }
 
-func (b *Broker) Subscribe(ctx context.Context, channel string) <-chan string {
+func (b *Broker) ListenStream(ctx context.Context, stream, group, consumer string) (<-chan string, error) {
 	const op = "broker.Subscribe"
-
-	pubsub := b.channel.Subscribe(ctx, channel)
 
 	msgChan := make(chan string)
 
+	err := b.channel.XGroupCreateMkStream(ctx, stream, group, "0").Err()
+	if err != nil && strings.Contains(err.Error(), "BUSYGROUP") {
+		err := b.channel.XGroupDelConsumer(ctx, stream, group, consumer).Err()
+		if err != nil {
+			return nil, fmt.Errorf("%s: delete consumer: %w", op, err)
+		}
+	} else if err != nil {
+		return nil, fmt.Errorf("%s: create stream: %w", op, err)
+	}
+
 	go func() {
-		defer pubsub.Close()
 		defer close(msgChan)
 
-		for {
-			msg, err := pubsub.ReceiveMessage(ctx)
-			if err != nil {
-				if ctx.Err() != nil {
-					return
-				}
+		currentID := "0"
+		currentBlock := 100
 
-				b.log.Error(op, zap.Error(err))
+		for {
+			select {
+			case <-ctx.Done():
 				return
+			default:
 			}
 
-			msgChan <- msg.Payload
+			entries, err := b.channel.XReadGroup(ctx, &redis.XReadGroupArgs{
+				Group:    group,
+				Consumer: consumer,
+				Streams:  []string{stream, currentID},
+				Count:    1,
+				Block:    time.Duration(currentBlock) * time.Millisecond,
+			}).Result()
+
+			if (err == redis.Nil || (len(entries) > 0 && len(entries[0].Messages) == 0)) && currentID == "0" {
+				currentID = ">"
+				currentBlock = 0
+				continue
+			}
+
+			if err != nil {
+				b.log.Error("Receive message failed",
+					zap.String("op", op),
+					zap.Error(err))
+				continue
+			}
+
+			for _, entry := range entries[0].Messages {
+				userID, ok := entry.Values["user_id"].(string)
+				if !ok {
+					b.log.Error("Invalid message type",
+						zap.String("op", op),
+						zap.Error(err))
+					continue
+				}
+
+				msgChan <- userID
+
+				b.channel.XAck(ctx, stream, group, entry.ID)
+			}
 		}
 	}()
 
-	return msgChan
+	return msgChan, nil
 }

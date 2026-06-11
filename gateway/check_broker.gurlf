@@ -12,10 +12,10 @@ Body:`
 Headers:Content-Type: application/json
 ID:0
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQxMDQ2Y2EzLTQxNjYtNGEyZC04NmNmLTA0MTM0OWZiZTZjMSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzM5NTAzMX0.Q5tg1uqh6HdVzAU9qHhGSJJRVhiHSGG7T6xGyYaC9L4","user_id":"41046ca3-4166-4a2d-86cf-041349fbe6c1"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFlNmU4ZTViLTc1YjktNDhhMC04ZGQ0LWYzMDYwMmIzNmU2NCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3NTI0MTc0OX0.Hnh0pe7hwbUWfZeFrWz1HeBG6jaVidSuzjo979ocUF4","user_id":"ae6e8e5b-75b9-48a0-8dd4-f30602b36e64"}
 CookieOut:`
 [localhost:8080]
- session_key:cc8345ff-ce07-46c6-be31-1352e8d3c947
+ session_key:d3552323-2dce-4737-807f-63236c7eecae
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -37,10 +37,10 @@ Body:`
 Headers:Content-Type: application/json
 ID:1
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQxMDQ2Y2EzLTQxNjYtNGEyZC04NmNmLTA0MTM0OWZiZTZjMSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzM5NTAzMX0.Q5tg1uqh6HdVzAU9qHhGSJJRVhiHSGG7T6xGyYaC9L4","user_id":"41046ca3-4166-4a2d-86cf-041349fbe6c1"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFlNmU4ZTViLTc1YjktNDhhMC04ZGQ0LWYzMDYwMmIzNmU2NCIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3NTI0MTc0OX0.Hnh0pe7hwbUWfZeFrWz1HeBG6jaVidSuzjo979ocUF4","user_id":"ae6e8e5b-75b9-48a0-8dd4-f30602b36e64"}
 CookieOut:`
 [localhost:8080]
- session_key:666959f1-96ad-431f-936a-5ca993b80782
+ session_key:cecfc32f-c6f9-49b0-acaf-4d08ea2d386c
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -61,7 +61,7 @@ Headers:`
 `
 ID:2
 Type:http
-Response:{"course_id":"5bbb73e2-6b10-4ed4-9914-a5ed43dfc607"}
+Response:{"course_id":"d207d9d9-33d9-48c3-903d-63e2d4946cbd"}
 [\new_course]
 
 [get_course]
@@ -73,7 +73,7 @@ Headers:`
 `
 ID:3
 Type:http
-Response:{"course_id":"5bbb73e2-6b10-4ed4-9914-a5ed43dfc607","description":"some more","name":"some","price":"12345"}
+Response:{"course_id":"d207d9d9-33d9-48c3-903d-63e2d4946cbd","description":"some more","name":"some","price":"12345"}
 [\get_course]
 
 [del]

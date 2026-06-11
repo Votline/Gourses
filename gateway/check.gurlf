@@ -12,10 +12,10 @@ Body:`
 Headers:Content-Type: application/json
 ID:0
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNmZTRjNDRhLTE5ODctNGRkZi1hNmVhLWIxOTYzN2Y4MzFiNSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzM5NTMxOX0.hbefLJaCI33lQomKUuJ1yj2K68dUPeD4WcSTJSsH15E","user_id":"cfe4c44a-1987-4ddf-a6ea-b19637f831b5"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0ODUyM2U0LTIyN2MtNDk2ZC04ZmQ3LWQ0YzdiMDg2N2U5MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3NTI0MTc1NX0.G2Uae_tmwF9cDLRkSOz9hbPhjIas3aChhZnWJd0lnzw","user_id":"148523e4-227c-496d-8fd7-d4c7b0867e92"}
 CookieOut:`
 [localhost:8080]
- session_key:952d2700-19b8-42a6-8573-7e9f2df4fe28
+ session_key:6cdbbcbf-ad4a-4791-9ae5-7644155aee1f
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -37,10 +37,10 @@ Body:`
 Headers:Content-Type: application/json
 ID:1
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNmZTRjNDRhLTE5ODctNGRkZi1hNmVhLWIxOTYzN2Y4MzFiNSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzM5NTMxOX0.hbefLJaCI33lQomKUuJ1yj2K68dUPeD4WcSTJSsH15E","user_id":"cfe4c44a-1987-4ddf-a6ea-b19637f831b5"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0ODUyM2U0LTIyN2MtNDk2ZC04ZmQ3LWQ0YzdiMDg2N2U5MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3NTI0MTc1NX0.G2Uae_tmwF9cDLRkSOz9hbPhjIas3aChhZnWJd0lnzw","user_id":"148523e4-227c-496d-8fd7-d4c7b0867e92"}
 CookieOut:`
 [localhost:8080]
- session_key:1cd65889-e8f8-4fb3-96bc-f4bb5c991783
+ session_key:a1c3becc-7b74-477d-91d9-0b20f7e57698
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -61,7 +61,7 @@ Headers:`
 `
 ID:2
 Type:http
-Response:{"course_id":"df26ce33-0f5c-46d9-9f9d-d9d1cb5e5052"}
+Response:{"course_id":"ce1f6d31-a64a-4e4d-86c1-b0737ce73297"}
 [\new_course]
 
 [get_course]
@@ -73,7 +73,7 @@ Headers:`
 `
 ID:3
 Type:http
-Response:{"course_id":"df26ce33-0f5c-46d9-9f9d-d9d1cb5e5052","description":"some more","name":"some","price":"12345"}
+Response:{"course_id":"ce1f6d31-a64a-4e4d-86c1-b0737ce73297","description":"some more","name":"some","price":"12345"}
 [\get_course]
 
 [upd_course]
@@ -99,7 +99,7 @@ Response:
 TargetID:3
 ID:5
 Type:repeat
-Response:{"course_id":"df26ce33-0f5c-46d9-9f9d-d9d1cb5e5052","description":"upd desc","name":"upd name","price":"147"}
+Response:{"course_id":"ce1f6d31-a64a-4e4d-86c1-b0737ce73297","description":"upd desc","name":"upd name","price":"147"}
 [\get_upd_course]
 
 [del_course]
@@ -131,10 +131,10 @@ Headers:`
 `
 ID:7
 Type:http
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNmZTRjNDRhLTE5ODctNGRkZi1hNmVhLWIxOTYzN2Y4MzFiNSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzM5NTMxOX0.hbefLJaCI33lQomKUuJ1yj2K68dUPeD4WcSTJSsH15E","user_id":"cfe4c44a-1987-4ddf-a6ea-b19637f831b5"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0ODUyM2U0LTIyN2MtNDk2ZC04ZmQ3LWQ0YzdiMDg2N2U5MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3NTI0MTc1NX0.G2Uae_tmwF9cDLRkSOz9hbPhjIas3aChhZnWJd0lnzw","user_id":"148523e4-227c-496d-8fd7-d4c7b0867e92"}
 CookieOut:`
 [localhost:8080]
- session_key:1cd65889-e8f8-4fb3-96bc-f4bb5c991783
+ session_key:a1c3becc-7b74-477d-91d9-0b20f7e57698
  Path:/
  Domain:localhost
  Max-Age:2592000
@@ -157,7 +157,7 @@ Body:`
 `
 ID:8
 Type:repeat
-Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNmZTRjNDRhLTE5ODctNGRkZi1hNmVhLWIxOTYzN2Y4MzFiNSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3MzM5NTMxOX0.hbefLJaCI33lQomKUuJ1yj2K68dUPeD4WcSTJSsH15E","user_id":"cfe4c44a-1987-4ddf-a6ea-b19637f831b5"}
+Response:{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0ODUyM2U0LTIyN2MtNDk2ZC04ZmQ3LWQ0YzdiMDg2N2U5MiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTc3NTI0MTc1NX0.G2Uae_tmwF9cDLRkSOz9hbPhjIas3aChhZnWJd0lnzw","user_id":"148523e4-227c-496d-8fd7-d4c7b0867e92"}
 [\log_upd_user]
 
 [del]

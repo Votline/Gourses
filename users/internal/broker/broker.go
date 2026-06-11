@@ -42,10 +42,17 @@ func (b *Broker) Close(ctx context.Context) error {
 	return gc.Shutdown(b.channel.Close, ctx)
 }
 
-func (b *Broker) Publish(channel, message string) error {
+func (b *Broker) PublishToStream(streamName, msgKey, msgVal string) error {
 	const op = "broker.Publish"
 
-	if err := b.channel.Publish(b.ctx, channel, message).Err(); err != nil {
+	if err := b.channel.XAdd(b.ctx, &redis.XAddArgs{
+		Stream: streamName,
+		MaxLen: 1000,
+		Approx: true,
+		Values: map[string]string{
+			msgKey: msgVal,
+		},
+	}).Err(); err != nil {
 		return fmt.Errorf("%s: publish message: %w", op, err)
 	}
 	return nil
